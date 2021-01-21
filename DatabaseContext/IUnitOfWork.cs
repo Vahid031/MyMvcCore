@@ -22,5 +22,6 @@ namespace DatabaseContext
         UnitOfWork Context { get; }
 
         IQueryable<T> Get<T>(Expression<Func<T, bool>> filter = null) where T : class;
+
     }
 }
