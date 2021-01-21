@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>bootstrap-toggle</id>
+    <version>2.2.2</version>
+    <title>bootstrap-toggle</title>
+    <authors>Min Hur, nuget pkg Kevin Peinado</authors>
+    <owners>Min Hur, nuget pkg Kevin Peinado</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <licenseUrl>https://licenses.nuget.org/MIT</licenseUrl>
+    <projectUrl>http://www.bootstraptoggle.com/</projectUrl>
+    <description>Bootstrap Toggle is a highly flexible Bootstrap plugin that converts checkboxes into toggles</description>
+    <releaseNotes></releaseNotes>
+    <tags>Bootstrap Toggle</tags>
+    <dependencies>
+      <dependency id="bootstrap" version="2.3.2" />
+    </dependencies>
+  </metadata>
+</package>

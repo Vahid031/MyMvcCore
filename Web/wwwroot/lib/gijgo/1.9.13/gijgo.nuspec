@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>Gijgo</id>
+    <version>1.9.13</version>
+    <title>Gijgo.com - Free Javascript Controls</title>
+    <authors>gijgo.com</authors>
+    <owners>gijgo.com</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
+    <projectUrl>http://gijgo.com/</projectUrl>
+    <description>Gijgo is a set of free for commercial use javascript controls distributed under MIT License. All widgets are high performance, built on top of the jQuery JavaScript Library with built-in support for Bootstrap 4 and Material Design. They are designed to saves you time and scales with your development process.</description>
+    <releaseNotes>Added integration with Angular 2+.
+Added new datetimepicker widget.
+Added new slider widget.
+Added various improvements in the visualization of the dropdown.
+Added spanish and italian translation for all widgets.
+Added getCSV and downloadCSV methods for the grid.
+Added updateNode method for the tree.
+Added headerRowHeight and bodyRowHeight configuration options for the grid.
+Added size configuration option for the datepicker.
+Added modal configuration option for the datepicker.
+Added header configuration option for the datepicker.
+Added footer configuration option for the datepicker.
+Added select event for the datepicker.
+Added size configuration option for the timepicker.
+Added select event for the timepicker.
+Added placeholder configuration option for the dropdown.
+Added containment configuration option for the draggable widget.
+Added parents method for the tree.
+Added showOnFocus configuration option for the datepicker.
+Added showRightIcon configuration option for the datepicker.
+Added Turkish, Chinise and Japanise translation for all widgets.
+
+Bug Fixes:
+https://github.com/atatanasov/gijgo/issues/281
+https://github.com/atatanasov/gijgo/issues/289
+https://github.com/atatanasov/gijgo/issues/295
+https://github.com/atatanasov/gijgo/issues/301
+https://github.com/atatanasov/gijgo/issues/302
+https://github.com/atatanasov/gijgo/issues/309
+https://github.com/atatanasov/gijgo/issues/310
+https://github.com/atatanasov/gijgo/issues/333
+https://github.com/atatanasov/gijgo/issues/334
+https://github.com/atatanasov/gijgo/issues/339
+https://github.com/atatanasov/gijgo/issues/340
+https://github.com/atatanasov/gijgo/issues/354
+https://github.com/atatanasov/gijgo/issues/388
+https://github.com/atatanasov/gijgo/issues/399
+https://github.com/atatanasov/gijgo/issues/426
+https://github.com/atatanasov/gijgo/issues/436
+https://github.com/atatanasov/gijgo/issues/441
+https://github.com/atatanasov/gijgo/issues/444
+
+https://github.com/atatanasov/gijgo/issues/465
+https://github.com/atatanasov/gijgo/issues/466
+https://github.com/atatanasov/gijgo/issues/467
+https://github.com/atatanasov/gijgo/issues/471
+https://github.com/atatanasov/gijgo/issues/497</releaseNotes>
+    <copyright>Gijgo.Com</copyright>
+    <language>en-US</language>
+    <tags>gijgo jquery grid javascript plugin datagrid table dialog modal tree treeview editor wysiwyg checkbox dropdown datepicker timepicker draggable droppable resizable bootstrap 4 angular</tags>
+    <dependencies>
+      <dependency id="jQuery" version="1.9.1" />
+    </dependencies>
+  </metadata>
+</package>

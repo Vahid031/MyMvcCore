@@ -1,0 +1,105 @@
+﻿@{
+    ViewBag.Title = "سطح دسترسی";
+}
+
+<nav>
+    <div class="nav nav-tabs" role="tablist">
+        <a class="nav-item nav-link" id="nav-new-tab" data-toggle="tab" href="#nav-new" role="tab" data-url="../Permission/_Create" aria-controls="nav-new" aria-selected="true">دسترسی جدید</a>
+        <a class="nav-item nav-link" id="nav-order-tab" data-toggle="tab" href="#nav-order" role="tab" data-url="../Permission/_Order" aria-controls="nav-order" aria-selected="false">اولویت بندی</a>
+        <a class="nav-item nav-link" id="nav-role-tab" data-toggle="tab" href="#nav-role" role="tab" data-url="../Permission/_Role" aria-controls="nav-role" aria-selected="false">دسترسی گروههای کاربری</a>
+        <a class="nav-item nav-link" id="nav-member-tab" data-toggle="tab" href="#nav-member" role="tab" data-url="../Permission/_Member" aria-controls="nav-user" aria-selected="false">دسترسی کاربران</a>
+    </div>
+</nav>
+
+
+<div class="tab-content card-body bg-white">
+    <div class="tab-pane fade" id="nav-new" role="tabpanel" aria-labelledby="nav-new-tab">
+        <div class="row">
+            <div class="form-group col-xl-3 col-lg-4 col-md-6 col-sm-6">
+                <div id="tree-create-permission">
+
+                </div>
+            </div>
+
+            <div class="form-group col-xl-9 col-lg-8 col-md-6 col-sm-6">
+                <div id="frm-create-permission">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="nav-order" role="tabpanel" aria-labelledby="nav-order-tab"></div>
+    <div class="tab-pane fade" id="nav-role" role="tabpanel" aria-labelledby="nav-role-tab"></div>
+    <div class="tab-pane fade" id="nav-member" role="tabpanel" aria-labelledby="nav-member-tab"></div>
+</div>
+
+
+
+
+
+
+@section scripts {
+    <script>
+
+
+        $(function () {
+
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+
+                var current = $(e.relatedTarget).attr('href');
+                var target = $(e.target).attr('href');
+                var url = $(e.target).attr("data-url");
+
+
+                if (target == '#nav-new') {
+
+                    $('#frm-create-permission').PartialView({
+                        url: url
+                    });
+
+                    AJAX({
+                        url  : '../Permission/_Tree',
+                        success: function (data) {
+
+                            var tree = $("#tree-create-permission").Tree({
+                                data: data,
+                                //expandAll: true,
+                                showIcon: true,
+                                selectable: true
+                            });
+
+
+                            $(tree).on('select', function (e, id) {
+
+                                var $container = $('#frm-create-permission');
+
+                                $container.PartialView({
+                                    type: 'Post',
+                                    url: '../Permission/_Update',
+                                    data: { id: id },
+                                    callBack: function () {
+
+                                        $container.HandleValidation();
+                                        $container.find('#btnSave').val('ویرایش');
+                                    }
+                                });
+                            });
+                        }
+                    });
+
+                }
+                else {
+
+                    $(target).PartialView({
+                        url: url
+                    });
+                }
+            });
+
+            $('#nav-new-tab').click();
+
+
+        });
+
+    </script>
+}

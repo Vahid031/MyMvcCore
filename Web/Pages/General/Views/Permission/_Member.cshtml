@@ -1,0 +1,87 @@
+﻿
+
+<div class="row">
+    <div class="form-group col-xl-2 col-lg-3 col-md-3 col-sm-8">
+        <select id="ddlmember" class="form-control selectpicker" title="انتخاب کنید" data-live-search="true" asp-items="ViewBag.Members">
+        </select>
+    </div>
+    <div class="form-group col-xl-4 col-lg-3 col-md-3 col-sm-4">
+        <div class="btn-group btn-group-toggle" data-toggle="buttons" style="direction:initial">
+            <label class="btn btn-secondary">
+                <input type="radio" name="AccessType" value="true"> منع دسترسی <i class="fa fa-ban"></i>
+            </label>
+            <label class="btn btn-secondary active">
+                <input type="radio" name="AccessType" value="false" checked> مجاز <i class="fa fa-universal-access"></i>
+            </label>
+        </div>
+    </div>
+    <div class="form-group col-xl-6 col-lg-6 col-md-6 col-sm-12">
+        <div id="tree-permission">
+
+        </div>
+    </div>
+    <div class="form-group col-xl-12 col-lg-12 col-md-12 col-sm-12 text-left">
+        <button type="button" class="btn-save"></button>
+    </div>
+</div>
+
+
+
+<script>
+
+    $(function () {
+
+        $('#ddlmember , input:radio[name="AccessType"]').on('change', function () {
+
+            Tree_MemberPermission($('#ddlmember').val());
+        });
+
+    });
+
+
+    function Tree_MemberPermission(memberId) {
+
+        var tree;
+
+        var isDenied = $('input:radio[name="AccessType"]:checked').val();
+
+        isDenied = Boolean(isDenied == 'true');
+
+        if (!(memberId > 0))
+            return;
+
+        AJAX({
+            type: 'Post',
+            url: '../Member/_Permission',
+            data: { id: memberId, isDenied: isDenied },
+            success: function (data) {
+
+                tree = $("#tree-permission").Tree({
+                    data: data,
+                    showIcon: true,
+                    checkbox: true,
+                    expandAll: true
+                });
+
+                $('#nav-member .btn-save').on('click', function () {
+
+                    isDenied = $('input:radio[name="AccessType"]:checked').val();
+
+                    AJAX({
+                        type: 'Post',
+                        url: '../Permission/SetMemberPermission',
+                        data: { memberId: memberId, permissionId: tree.Values(), isDenied: isDenied },
+                        success: function (data) {
+
+                            Messages(data.type, data.message);
+                        }
+
+                    });
+                });
+            }
+        });
+
+    }
+
+</script>
+

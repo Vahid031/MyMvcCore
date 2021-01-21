@@ -1,0 +1,65 @@
+﻿@model ViewModels.General.LoginViewModel
+@{
+    ViewBag.Title = "ورود به سایت";
+}
+
+<style>
+    main[role='main'] {
+        padding-top: 10px;
+        padding-right: 0;
+    }
+
+    #RightNavigation {
+        display: none;
+    }
+</style>
+
+<section id="login" class="h-100">
+    <div class="container h-100">
+        <div class="row justify-content-center h-100">
+            <div class="card-wrapper">
+                <div class="brand">
+                    <img src="~/Images/logo.jpg" />
+                </div>
+                <div class="card p-3">
+                    <div class="card-body">
+                        <h4 class="card-title mb-5 text-center">ورود به سامانه</h4>
+                        <form method="post" asp-controller="Account" asp-action="Login">
+                            <div class="form-group col-lg-12 col-md-12 col-sm-12">
+                                <label asp-for="UserName"></label>
+                                <input type="text" asp-for="UserName" class="form-control" />
+                                <span asp-validation-for="UserName"></span>
+                            </div>
+                            <div class="form-group col-lg-12 col-md-12 col-sm-12">
+                                <label asp-for="Password"></label>
+                                <input type="password" asp-for="Password" class="form-control" />
+                                <span asp-validation-for="Password"></span>
+                            </div>
+                            <div class="form-group col-lg-12 col-md-12 col-sm-12">
+                                <input type="checkbox" asp-for="RememberMe" class="switch">
+                                <label asp-for="RememberMe"></label>
+                            </div>
+                            <div class="form-group col-lg-12 col-md-12 col-sm-12">
+                                <button type="submit" class="btn btn-primary btn-block">ورود</button>
+                            </div>
+                            <div class="mt-4 text-center">
+                                عضو نشده اید؟ <a href="register.html">ثبت نام</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+@*<script>
+    $(document).ready(function () {
+        $("main[role='main']").css("padding-top", "10px");
+        $("main[role='main']").css("padding-right", "0");
+        $('#RightNavigation').css("display", "none");
+    });
+</script>*@

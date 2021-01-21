@@ -1,0 +1,230 @@
+﻿@{
+    ViewBag.Title = "تعریف کاربر";
+}
+
+
+<div class="card">
+    <div class="card-header">
+        @ViewBag.Title
+    </div>
+    <div class="card-body">
+
+        <div id="frm-container">
+
+        </div>
+
+    </div>
+</div>
+
+
+
+<div id="frm-grid">
+</div>
+
+
+
+
+
+
+
+@section scripts {
+    <script>
+
+
+        $(function () {
+            SetDefault_Member();
+        });
+
+
+        function Load_Member() {
+
+
+            var columns = [
+                {
+                    title: 'ردیف',
+                    contentType: ContentType.rowNumber
+                },
+                {
+                    title: "نام",
+                    content: "Person.FirstName"
+                },
+                {
+                    title: "نام خانوادگی",
+                    content: "Person.LastName"
+                },
+                {
+                    title: "کد ملی",
+                    content: "Person.NationalCode"
+                },
+                {
+                    title: "جنسیت",
+                    contentType: ContentType.function,
+                    content: function (e) {
+                        if (e.Person.Gender == true)
+                            return 'آقا';
+                        else
+                            return 'خانم';
+                    },
+                    search: {
+                        element: "select",
+                        attribute: {
+                            class: 'form-control selectpicker',
+                            name: 'Person.Gender',
+                            value: '',
+                            title : 'انتخاب کنید',
+                            style:'min-width:50px'
+                        },
+                        item: {
+                            true: 'آقا',
+                            false: 'خانم'
+                        }
+                    }
+                },
+                {
+                    title: "تاریخ تولد",
+                    contentType: ContentType.function,
+                    content: function (e) {
+                        return MiladiToJalali(e.Person.Birthday);
+                    },
+                    search: {
+                        element: "input",
+                        attribute: {
+                            class: 'form-control datepicker',
+                            name: 'Person.Birthday',
+                            value: ''
+                        }
+                    }
+                },
+                {
+                    title: "شماره تلفن",
+                    content: "Person.PhoneNumber",
+                },
+                {
+                    title: "شماره همراه",
+                    content: "Person.MobileNumber",
+                },
+                {
+                    title: "پست اکترونیکی",
+                    content: "Person.Email",
+                },
+                {
+                    contentType: ContentType.text,
+                    title: 'ویرایش',
+                    event: {
+                        click: function (e) {
+                            Update_Member(e.data.row.Person.Id);
+                        }
+                    },
+                    attribute: {
+                        class: 'fa fa-edit',
+                        style: 'color:blue;cursor: pointer;'
+                    }
+                },
+                {
+                    contentType: ContentType.text,
+                    title: 'حذف',
+                    event: {
+                        click: function (e) {
+                            MvcAlert(function () { Delete_Member(e.data.row.Person.Id) });
+                        }
+                    },
+                    attribute: {
+                        class: 'fa fa-trash',
+                        style: 'color:red;cursor: pointer;'
+                    }
+                }
+            ];
+
+            $("#frm-grid").GridView({
+                url: '../Member/_List',
+                columns: columns
+            });
+
+        }
+
+        function Select_Member(id) {
+            alert(id);
+            //MvcAlert(function () {
+            //    UpdateMember(id);
+            //});
+        }
+
+        function Delete_Member(id) {
+            Ajax('Post', '../Member/_Delete', { id: id }, function (data, status, xhr) {
+                Messages(data.type, data.message);
+                var pageNumber = 1;
+                var pageSize = 5;
+                var order = $('#frm-grid').children('table')[0].getAttribute("data-th");
+
+                if ($('#frm-grid-Member tbody tr').length != 2) {
+                    pageNumber = $('#frm-grid .page-record').val();
+                }
+                else {
+                    if ($('#frm-grid .page-record').val() != 1)
+                        pageNumber = $('#frm-grid-Member .page-record').val() - 1;
+                }
+
+                debugger
+
+                $("#frm-grid").GridView();
+            });
+        }
+
+        function Update_Member(id) {
+
+            var container = $('#frm-container');
+
+            container.PartialView({
+                type: 'POST',
+                url: '../Member/_Update',
+                data: { id: id },
+                callBack: function () {
+
+                    container.HandleValidation();
+                    $('#btnSave').val('ویرایش');
+                }
+            });
+
+        }
+
+        function SetDefault_Member() {
+
+            var Permissions = [
+                'Member/_Create',
+                'Member/_List',
+                'Member/_Update',
+                'Member/_Delete'
+            ];
+
+            var container = $('#frm-container');
+
+            if ($.inArray("Member/_Create", Permissions) > -1) {
+
+                container.PartialView({
+                    url: '../Member/_Create',
+                    callBack: function () {
+
+                        $('#btnSave').val('ذخیره');
+                        container.on("submit", "#frm-Member", function (e) {
+
+                            Ajax('Post', '../Member/_Create', $('#frm-Member').serialize(), function (data, textStatus, xhr) {
+                                //Messages(data.type, data.message);
+                                //SetDefault_Member();
+                            });
+                        });
+                    }
+                });
+
+
+            }
+
+            if ($.inArray("Member/_List", Permissions) > -1) {
+                Load_Member();
+            }
+
+
+            container.HandleValidation();
+        }
+
+    </script>
+}

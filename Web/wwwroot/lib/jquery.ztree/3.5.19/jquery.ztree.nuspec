@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Jquery.ZTree</id>
+    <version>3.5.19</version>
+    <title>Jquery.ZTree</title>
+    <authors>漯河时光网络科技有限公司</authors>
+    <owners>漯河时光网络科技有限公司</owners>
+    <licenseUrl>http://www.ztree.me/v3/main.php#_license</licenseUrl>
+    <projectUrl>http://www.ztree.me/</projectUrl>
+    <iconUrl>http://www.5shiguang.net/Images/nuget-logo.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>zTree is an advanced jQuery 'tree plug-in'. The performance is excellent, it is easy to configurw (with a full set of options), and has many advanced features.</description>
+    <releaseNotes>•All of the zTree3.0 features can be loaded with one javascript file (60k minified), or to save loading times, can be loaded as separate smaller modules.
+•zTree3.0 can use lazy loading for large data, it can easily load tens of thousands of nodes in seconds even in the IE6 browser.
+•Compatible with IE, FireFox, Chrome, Opera, Safari and other browsers.
+•Supports JSON data.
+•Supports both static and asynchronous (Ajax) data loading.
+•Can be skinned with CSS or be configured to use custom icons easily.
+•Includes checkbox and/or radio button options.
+•Good online support, queries are responded to and fixes made if required.
+•Flexible editing (add / delete / change / search) functions, such as drag and drop, you can even drag and drop multiple nodes.
+•Supports multiple instances of zTree in one page.
+•Simple configuration parameters. Most functionality is available with little or no configuration. Extensive API documentation and examples mean that you have all the information about zTree at your fingertips</releaseNotes>
+    <copyright>Copyright ©2015 漯河时光网络科技有限公司 版权所有</copyright>
+    <language>zh-CN</language>
+    <tags>ztree jquery.ztree jquery plugin dodu 时光网络科技</tags>
+  </metadata>
+</package>

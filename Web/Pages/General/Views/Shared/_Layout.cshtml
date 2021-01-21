@@ -1,0 +1,118 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewBag.Title</title>
+    <link href="~/lib/bootstrap/4.4.1/content/Content/bootstrap.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap-select/1.13.12/content/Content/bootstrap-select.css" rel="stylesheet" />
+    <link href="~/css/style.css" rel="stylesheet" />
+    <link href="~/lib/jquery.ui.combined/1.12.1/Content/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+    <link href="~/lib/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/css/GridView.css" rel="stylesheet" />
+    <link href="~/css/PersianDatePicker.css" rel="stylesheet" />
+    <link href="~/css/Login.css" rel="stylesheet" />
+    <link href="~/css/CustomInput.css" rel="stylesheet" />
+    <link href="~/css/Tree.css" rel="stylesheet" />
+</head>
+<body>
+    @if (Context.User.Identity.IsAuthenticated)
+    { 
+    <nav class="navbar-dark bg-dark topnav">
+        <input class="menu-btn top" type="checkbox" id="cbTopnav" />
+        <label class="menu-icon top" for="cbTopnav"><span class="navicon"></span></label>
+        <input class="menu-btn side" type="checkbox" id="cbSidebar" />
+        <label class="menu-icon side" for="cbSidebar"><span class="navicon"></span></label>
+        <a href="" class="title">سیستم جامع سازمانی</a>
+        <a class="logout" href="../Account/Logout"><i class="fa fa-sign-out fa-rotate-180"></i> <span>خروج</span></a>
+
+        <ul class="menu navbar-nav" id="Menu">
+            <li class="nav-item">
+                <img src="~/Images/logo.jpg" class="img logo rounded-circle" />
+            </li>
+            <li class="nav-item">
+                <a href="#SubMenu2" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">اطلاعات پایه</a>
+                <ul class="collapse navbar-nav" id="SubMenu2" data-parent="#Menu">
+                    <li class="nav-item"><a href="../Role/Index" class="nav-link">تعریف نقش</a></li>
+                    <li class="nav-item"><a href="../Member/Index" class="nav-link">تعریف کاربر</a></li>
+                    <li class="nav-item"><a href="../Permission/Index" class="nav-link">سطح دسترسی</a></li>
+                </ul>
+            </li>
+            <li class="nav-item"><a href="../" class="nav-link">سیستم ها</a></li>
+        </ul>
+    </nav>
+    <aside class="bg-dark sidebar">
+        <div class="p-3 pt-5">
+            <a id="RightNavigationClose" href="#" class="collapse"><i class="fa fa-times"></i></a>
+            <img src="~/Images/logo.jpg" class="img logo rounded-circle" />
+        </div>
+        <nav class="p-3 navbar-dark">
+
+
+        </nav>
+        <div class="footer"><p>تمامی حقوق مادی و معنوی نرم افزار محفوظ می باشد ©</p></div>
+    </aside>
+    }
+
+    <div class="container-fluid">
+        <main role="main">
+            @RenderBody()
+        </main>
+    </div>
+    <!-- AlertBox -->
+    <div id="Alert" class="alert alert-success collapse" role="alert">
+        <span class="text"></span>
+    </div>
+    <!-- AlertBox -->
+    <!-- Modal -->
+    <div class="modal fade rtl" id="mdlMain" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header pt-1 pb-1 pl-2 bg-dark">
+                    <lable class="modal-title text-white-50" id="ModalLabel"></lable>
+                    <a href="#" class="text-white-50" data-dismiss="modal" aria-label="Close">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+                <div class="modal-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <!-- AlertBox -->
+    <div class="modal fade rtl" id="mdlConfirm" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content text-center">
+                <div class="modal-body">
+                    <div class="pt-4 pb-4 mt-4 mb-4">
+                        <span> آیا از حذف اطمینان دارید؟ </span>
+                    </div>
+                    <a href="#" class="btn btn-info pr-5 pl-5 ml-2" data-dismiss="modal" aria-label="Close">بله</a>
+                    <a href="#" class="btn btn-danger pr-5 pl-5 mr-2" data-dismiss="modal" aria-label="Close">خیر</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- AlertBox -->
+    <!-- loading -->
+    <div id="loading" class="loading collapse" role="status">
+        <img src="~/Images/Loading3.gif" />
+    </div>
+    <!-- loading -->
+    <script src="~/lib/jquery/3.4.1/Content/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/lib/popper.js/1.16.1/content/Scripts/umd/popper.min.js"></script>
+    <script src="~/lib/bootstrap/4.4.1/content/Scripts/bootstrap.min.js"></script>
+    <script src="~/lib/bootstrap-select/1.13.12/content/Scripts/bootstrap-select.js"></script>
+    <script src="~/lib/jquery.ui.combined/1.12.1/Content/Scripts/jquery-ui-1.12.1.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/js/JScript.js" asp-append-version="true"></script>
+    <script src="~/js/PersianDatePicker.js" asp-append-version="true"></script>
+    <script src="~/js/Tree.js" asp-append-version="true"></script>
+    <script src="~/js/GridView.js" asp-append-version="true"></script>
+    <script src="~/js/JsValidation.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

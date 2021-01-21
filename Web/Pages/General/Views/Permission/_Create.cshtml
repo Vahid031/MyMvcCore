@@ -1,0 +1,112 @@
+﻿@model ViewModels.General.PermissionViewModel.CreatePermissionViewModel
+
+
+
+<form id="frm-permission" method="post" class="operationform" autocomplete="off">
+    <input type="hidden" asp-for="Permission.Id" class="Id" />
+    <input type="hidden" asp-for="Permission.ParentId" />
+    <input type="hidden" asp-for="Permission.Order" />
+    <div class="row">
+        <div class="form-group col-xl-2 col-lg-3 col-md-4 col-sm-6">
+            <label asp-for="Permission.Title"></label>
+            <input type="text" asp-for="Permission.Title" class="form-control" />
+            <span asp-validation-for="Permission.Title"></span>
+        </div>
+        <div class="form-group col-xl-2 col-lg-3 col-md-4 col-sm-6">
+            <label asp-for="Permission.Controller"></label>
+            <input type="text" asp-for="Permission.Controller" class="form-control ltr" onkeypress="return (event.charCode < 128)" />
+            <span asp-validation-for="Permission.Controller"></span>
+        </div>
+        <div class="form-group col-xl-2 col-lg-3 col-md-4 col-sm-6">
+            <label asp-for="Permission.Action"></label>
+            <input type="text" asp-for="Permission.Action" class="form-control ltr" onkeypress="return (event.charCode < 128)" />
+            <span asp-validation-for="Permission.Action"></span>
+        </div>
+        <div class="form-group col-xl-2 col-lg-3 col-md-4 col-sm-6">
+            <label asp-for="Permission.Icon"></label>
+            <input type="text" asp-for="Permission.Icon" class="form-control ltr" onkeypress="return (event.charCode < 128)" />
+            <span asp-validation-for="Permission.Icon"></span>
+        </div>
+        <div class="form-group col-xl-2 col-lg-3 col-md-4 col-sm-6">
+            <label asp-for="Permission.Active" class="w-100"></label>
+            @Html.CheckBox("Permission.Active", new { @class = "switch" })
+            <span asp-validation-for="Permission.Active"></span>
+        </div>
+        <div class="form-group col-xl-2 col-lg-3 col-md-4 col-sm-6">
+            <label asp-for="Permission.Visible" class="w-100"></label>
+            @Html.CheckBox("Permission.Visible", new { @class = "switch" })
+            <span asp-validation-for="Permission.Visible"></span>
+        </div>
+
+        <div class="form-group col-xl-12 col-lg-12 col-md-12 col-sm-12 text-left">
+            <button type="submit" class="btn-save" />
+            <button type="button" class="btn-cancel" />
+            <button type="button" class="btn-delete" />
+        </div>
+    </div>
+</form>
+
+
+<script>
+
+    $(function () {
+
+        var $container = $('#frm-permission');
+
+        var id = $container.find('#Permission_Id').val();
+
+
+        if (id != '' && id > 0) {
+
+            $container.find('.btn-delete').on('click', function () {
+
+                MvcAlert(function () {
+
+                    AJAX({
+                        type: 'Post',
+                        url: '../Permission/_Delete', 
+                        data: { id: id },
+                        success: function (data) {
+
+                            Messages(data.type, data.message);
+
+                            if (data.success == true)
+                                $container.find('.btn-cancel').trigger('click');
+                        }
+                    });
+                });
+            });
+        }
+        else {
+            $container.find('.btn-delete').remove();
+        }
+
+        $container.on('click', '.btn-cancel', function () {
+            $('#tree-create-permission').find('*').removeClass('tree-select');
+            $container.find('.btn-delete').remove();
+            $container.ResetForm();
+        });
+
+
+        $container.on("submit", function (e) {
+            e.preventDefault();
+
+            AJAX({
+                type: 'Post',
+                url: '../Permission/_Create',
+                data: $container.serialize(),
+                success: function (data) {
+
+                    Messages(data.type, data.message);
+
+                    if (data.success == true)
+                        $container.find('.btn-cancel').trigger('click');
+                }
+            });
+        });
+
+
+        $container.HandleValidation();
+    });
+
+</script>

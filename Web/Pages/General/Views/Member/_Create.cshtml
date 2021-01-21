@@ -1,0 +1,99 @@
+﻿@model ViewModels.General.MemberViewModel.CreateMemberViewModel
+
+
+<form id="frm-Member" method="post" class="operationform" autocomplete="off">
+    <input type="hidden" asp-for="Member.Id" class="Id" />
+    <div class="row">
+        <div class="form-group col-xl-2 col-lg-3 col-md-4 col-sm-6">
+            <label asp-for="Member.Person.FirstName"></label>
+            <input type="text" asp-for="Member.Person.FirstName" class="form-control persian" />
+            <span asp-validation-for="Member.Person.FirstName"></span>
+        </div>
+        <div class="form-group col-xl-2 col-lg-3 col-md-4 col-sm-6">
+            <label asp-for="Member.Person.LastName"></label>
+            <input type="text" asp-for="Member.Person.LastName" class="form-control persian" />
+            <span asp-validation-for="Member.Person.LastName"></span>
+        </div>
+        <div class="form-group col-xl-2 col-lg-3 col-md-4 col-sm-6">
+            <label asp-for="Member.Person.MobileNumber"></label>
+            <input type="text" asp-for="Member.Person.MobileNumber" class="form-control numeric" />
+            <span asp-validation-for="Member.Person.MobileNumber"></span>
+        </div>
+        <div class="form-group col-xl-2 col-lg-3 col-md-4 col-sm-6">
+            <label asp-for="Member.Person.PhoneNumber"></label>
+            <input type="text" asp-for="Member.Person.PhoneNumber" class="form-control numeric" />
+            <span asp-validation-for="Member.Person.PhoneNumber"></span>
+        </div>
+        <div class="form-group col-xl-2 col-lg-3 col-md-4 col-sm-6">
+            <label asp-for="Member.Person.NationalCode"></label>
+            <input type="text" asp-for="Member.Person.NationalCode" class="form-control numeric" />
+            <span asp-validation-for="Member.Person.NationalCode"></span>
+        </div>
+        <div class="form-group col-xl-2 col-lg-3 col-md-4 col-sm-6">
+            <label asp-for="Member.Person.Gender"></label>
+            <select asp-for="Member.Person.Gender" class="form-control selectpicker" title="انتخاب کنید">
+                <option value="true">آقا</option>
+                <option value="false">خانم</option>
+            </select>
+        </div>
+        <div class="form-group col-xl-2 col-lg-3 col-md-4 col-sm-6">
+            <label asp-for="Member.Person.Birthday"></label>
+            <input type="text" asp-for="Member.Person.Birthday" class="form-control datepicker" />
+            <span asp-validation-for="Member.Person.Birthday"></span>
+        </div>
+        <div class="form-group col-xl-2 col-lg-3 col-md-4 col-sm-6">
+            <label asp-for="Member.Person.Email"></label>
+            <input type="text" asp-for="Member.Person.Email" class="form-control" />
+            <span asp-validation-for="Member.Person.Email"></span>
+        </div>
+        <div class="form-group col-xl-2 col-lg-3 col-md-4 col-sm-6">
+            <label asp-for="Member.UserName"></label>
+            <input type="text" asp-for="Member.UserName" class="form-control" />
+            <span asp-validation-for="Member.UserName"></span>
+        </div>
+        <div class="form-group col-xl-2 col-lg-3 col-md-4 col-sm-6">
+            <label asp-for="Member.Active" class="w-100"></label>
+            @Html.CheckBox("Member.Active", new { @class = "switch" })
+            <span asp-validation-for="Member.Active"></span>
+        </div>
+
+        <div class="form-group col-xl-12 col-lg-12 col-md-12 col-sm-12 text-left">
+            <button type="submit" class="btn-save" />
+            <button type="button" class="btn-cancel" />
+        </div>
+    </div>
+</form>
+
+
+<script>
+
+    $(function () {
+
+        var $container = $('#frm-Member');
+
+        $container.on("submit", function (e) {
+            e.preventDefault();
+
+            AJAX({
+                type: 'Post',
+                url: '../Member/_Create',
+                data: $container.serialize(),
+                success: function (data) {
+
+                    Messages(data.type, data.message);
+
+                    if (data.success == true) {
+                        $container.parents(".modal").modal('hide');
+                    }
+                }
+            });
+        });
+
+        $container.on('click', '.btn-cancel', function () {
+            $container.parents(".modal").modal('hide');
+        });
+
+        $container.HandleValidation();
+    });
+
+</script>
