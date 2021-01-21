@@ -15,7 +15,6 @@ using System;
 using Microsoft.AspNetCore.Http;
 using Services.UserService;
 using DatabaseContext;
-using Newtonsoft.Json;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Web
