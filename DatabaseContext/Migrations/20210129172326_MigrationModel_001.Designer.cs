@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DatabaseContext.Migrations
 {
     [DbContext(typeof(UnitOfWork))]
-    [Migration("20210129161409_MigrationModel_001")]
+    [Migration("20210129172326_MigrationModel_001")]
     partial class MigrationModel_001
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,7 +24,6 @@ namespace DatabaseContext.Migrations
             modelBuilder.Entity("DomainModels.General.Log", b =>
                 {
                     b.Property<Guid?>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("CreateDate")
@@ -62,7 +61,6 @@ namespace DatabaseContext.Migrations
             modelBuilder.Entity("DomainModels.General.LogDetail", b =>
                 {
                     b.Property<Guid?>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("CreateDate")
@@ -94,7 +92,6 @@ namespace DatabaseContext.Migrations
             modelBuilder.Entity("DomainModels.General.Member", b =>
                 {
                     b.Property<Guid?>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool?>("Active")
@@ -129,7 +126,6 @@ namespace DatabaseContext.Migrations
             modelBuilder.Entity("DomainModels.General.MemberPermission", b =>
                 {
                     b.Property<Guid?>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("CreateDate")
@@ -161,7 +157,6 @@ namespace DatabaseContext.Migrations
             modelBuilder.Entity("DomainModels.General.Permission", b =>
                 {
                     b.Property<Guid?>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Action")
@@ -210,7 +205,6 @@ namespace DatabaseContext.Migrations
             modelBuilder.Entity("DomainModels.General.Person", b =>
                 {
                     b.Property<Guid?>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("Birthday")
@@ -258,7 +252,6 @@ namespace DatabaseContext.Migrations
             modelBuilder.Entity("DomainModels.General.Role", b =>
                 {
                     b.Property<Guid?>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("CreateDate")
@@ -286,7 +279,6 @@ namespace DatabaseContext.Migrations
             modelBuilder.Entity("DomainModels.General.RoleMember", b =>
                 {
                     b.Property<Guid?>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("CreateDate")
@@ -315,7 +307,6 @@ namespace DatabaseContext.Migrations
             modelBuilder.Entity("DomainModels.General.RolePermission", b =>
                 {
                     b.Property<Guid?>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("CreateDate")

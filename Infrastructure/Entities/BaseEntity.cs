@@ -1,11 +1,14 @@
-﻿using System;
+﻿using Infrastructure.Attributes;
+using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DomainModels
+namespace Infrastructure.Entities
 {
     public abstract class BaseEntity
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public Guid? Id { get; set; }
 
         [Index(IsUnique = true, IsClustered = true)]
@@ -17,8 +20,8 @@ namespace DomainModels
         //public static bool operator ==(Guid a, Guid b) => a.ToString().Equals(b.ToString());
         public BaseEntity()
         {
-            if (Id == null)
-                Id = new Guid();
+            Id = Guid.NewGuid();
+            CreateDate = DateTime.Now;
         }
     }
 }

@@ -1,3 +1,4 @@
+using Infrastructure.Entities;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 

@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Infrastructure.Entities;
+using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace DomainModels.General
 {

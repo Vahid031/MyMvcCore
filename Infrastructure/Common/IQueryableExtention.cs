@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 
 namespace Infrastructure.Common
 {
-    public static class IQueryableExtensions
+    public static class IQueryableExtention
     {
         public static string ToSql<T>(this IQueryable<T> query) where T : class
         {

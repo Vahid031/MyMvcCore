@@ -11,7 +11,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq.Expressions;
 using Infrastructure.Common;
-using DomainModels;
+using DatabaseContext.Extentions;
 
 namespace DatabaseContext.Context
 {
@@ -32,22 +32,9 @@ namespace DatabaseContext.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            foreach (var entity in modelBuilder.Model.GetEntityTypes())
-            {
-                entity.GetKeys().ToList().ForEach(key => key.SetIsClustered(false));
+            modelBuilder.AddIndexes();
 
-                foreach (var prop in entity.GetProperties())
-                {
-                    var attr = prop.PropertyInfo.GetCustomAttribute<IndexAttribute>();
-
-                    if (attr != null)
-                    {
-                        var index = entity.AddIndex(prop);
-                        index.IsUnique = attr.IsUnique;
-                        index.SetIsClustered(attr.IsClustered);
-                    }
-                }
-            }
+            modelBuilder.Seed();
         }
         public new DbSet<T> Set<T>() where T : class
         {

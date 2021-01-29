@@ -34,7 +34,7 @@ namespace Services.UserService
             get
             {
                 var member = context.User.Claims.FirstOrDefault(m => m.Type.Equals("MemberId")).ToString();
-                return Guid.Parse(member);
+                return new Guid(member.Replace("MemberId:","").Trim());
             }
         }
 
