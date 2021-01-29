@@ -1,6 +1,7 @@
 using DomainModels.General;
 using Infrastructure.Entities;
 using Services.GenericService;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ViewModels.General.PermissionViewModel;
@@ -13,14 +14,14 @@ namespace Services.General.PermissionService
 
         IEnumerable<Tree> Tree();
 
-        Task<Response> ChangePeriority(int id, int parentId);
+        Task<Response> ChangePeriority(Guid id, Guid parentId);
 
-        Task<Response> SetRolePermission(int roleId, int[] permissionId);
+        Task<Response> SetRolePermission(Guid roleId, Guid[] permissionId);
 
-        Task<Response> SetMemberPermission(int memberId, int[] permissionId, bool isDenied);
+        Task<Response> SetMemberPermission(Guid memberId, Guid[] permissionId, bool isDenied);
 
         Task<Response> Save(CreatePermissionViewModel model);
 
-        Task<Response> Remove(int Id);
+        Task<Response> Remove(Guid Id);
     }
 }

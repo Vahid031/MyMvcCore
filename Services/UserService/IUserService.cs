@@ -1,6 +1,7 @@
 ﻿using DomainModels.General;
 using Infrastructure.Entities;
 using Infrastructure.Enums;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ViewModels.General;
@@ -9,7 +10,7 @@ namespace Services.UserService
 {
     public interface IUserService
     {
-        int MemberId { get; }
+        Guid MemberId { get; }
 
         bool IsAuthenticated { get; }
 

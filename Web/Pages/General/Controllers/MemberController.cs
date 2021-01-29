@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Services.General.MemberService;
 using Services.UserService;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -42,7 +43,7 @@ namespace Web.Pages.General.Controllers
         }
 
         [HttpPost]
-        public IActionResult _Update(int id)
+        public IActionResult _Update(Guid id)
         {
             return PartialView("_Create", memberService.Get(id));
         }
@@ -63,13 +64,13 @@ namespace Web.Pages.General.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> _Delete(int id)
+        public async Task<JsonResult> _Delete(Guid id)
         {
             return Json(await memberService.Remove(id));
         }
 
         [HttpPost]
-        public JsonResult _Permission(int id, bool isDenied)
+        public JsonResult _Permission(Guid id, bool isDenied)
         {
             return Json(userService.Result(memberService.Permission(id, isDenied)));
         }

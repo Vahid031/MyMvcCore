@@ -6,12 +6,8 @@ using Infrastructure.Validation;
 namespace DomainModels.General
 {
     [Table("LogDetails", Schema = "General")]
-    public class LogDetail
+    public class LogDetail : BaseEntity
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int? Id { get; set; }
-
         [Display(Name = "فیلد")]
         [StringLength(40, ErrorMessage = "حداکثر 40 کاراکتر")]
         public string PropertyName { get; set; }
@@ -21,7 +17,7 @@ namespace DomainModels.General
         public string PropertyValue { get; set; }
 
         [Display(Name = "وقعه")]
-        public int? LogId { get; set; }
+        public Guid? LogId { get; set; }
 
         [ForeignKey(nameof(LogId))]
         public virtual Log Log { get; set; }

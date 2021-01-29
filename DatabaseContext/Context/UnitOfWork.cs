@@ -11,6 +11,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq.Expressions;
 using Infrastructure.Common;
+using DomainModels;
 
 namespace DatabaseContext.Context
 {
@@ -29,6 +30,25 @@ namespace DatabaseContext.Context
         public UnitOfWork(DbContextOptions<UnitOfWork> options) : base(options)
         { }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            foreach (var entity in modelBuilder.Model.GetEntityTypes())
+            {
+                entity.GetKeys().ToList().ForEach(key => key.SetIsClustered(false));
+
+                foreach (var prop in entity.GetProperties())
+                {
+                    var attr = prop.PropertyInfo.GetCustomAttribute<IndexAttribute>();
+
+                    if (attr != null)
+                    {
+                        var index = entity.AddIndex(prop);
+                        index.IsUnique = attr.IsUnique;
+                        index.SetIsClustered(attr.IsClustered);
+                    }
+                }
+            }
+        }
         public new DbSet<T> Set<T>() where T : class
         {
             return base.Set<T>();
@@ -42,7 +62,7 @@ namespace DatabaseContext.Context
             }
         }
 
-        public void Commit(int? memberId)
+        public void Commit(Guid? memberId)
         {
             ApplyDefaultValues();
 
@@ -69,7 +89,7 @@ namespace DatabaseContext.Context
             }
         }
 
-        public async Task CommitAsync(int? memberId)
+        public async Task CommitAsync(Guid? memberId)
         {
             ApplyDefaultValues();
 
@@ -96,11 +116,11 @@ namespace DatabaseContext.Context
             }
         }
 
-        private void ApplyAuditLog(EntityEntry entry, int memberId)
+        private void ApplyAuditLog(EntityEntry entry, Guid memberId)
         {
-            var rowId = (int?)entry.Entity.GetType().GetProperties().Where(e => Attribute.IsDefined(e, typeof(KeyAttribute))).Select(p => p.GetValue(entry.Entity)).FirstOrDefault();
+            var rowId = (Guid?)entry.Entity.GetType().GetProperties().Where(e => Attribute.IsDefined(e, typeof(KeyAttribute))).Select(p => p.GetValue(entry.Entity)).FirstOrDefault();
 
-            if (rowId > 0)
+            if (rowId != null)
             {
                 Log log = new Log()
                 {

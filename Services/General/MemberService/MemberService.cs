@@ -35,24 +35,24 @@ namespace Services.General.MemberService
             });
         }
 
-        public CreateMemberViewModel Get(int Id)
+        public CreateMemberViewModel Get(Guid Id)
         {
-            var a = Get(m => m.Id == Id).Include(m => m.Person);
+            var a = Get(m => m.Id.Equals(Id)).Include(m => m.Person);
 
             return a.AsEnumerable().Select(Result => new CreateMemberViewModel() { Member = Result }).FirstOrDefault();
         }
 
-        public IEnumerable<Tree> Permission(int id, bool isDenied)
+        public IEnumerable<Tree> Permission(Guid id, bool isDenied)
         {
             var member = uow.Get<MemberPermission>()
                             .AsQueryable()
-                            .Where(m => id == (m.MemberId.HasValue ? m.MemberId.Value : 0))
+                            .Where(m => id == m.MemberId)
                             .Where(m => m.IsDenied == isDenied)
                             .ToList();
 
             return uow.Get<Permission>().AsEnumerable().Select(Result => new Tree()
             {
-                id = Result.Id.Value,
+                id = Result.Id,
                 parentId = Result.ParentId,
                 @checked = member.Any(m => m.PermissionId == Result.Id),
                 disabled = false,
@@ -90,27 +90,17 @@ namespace Services.General.MemberService
             return result;
         }
 
-        public async Task<Response> Remove(int id)
+        public async Task<Response> Remove(Guid id)
         {
-            Response result;
+            //uow.Entry<Permission>(Find(id)).Collection(m => m.RolePermissions).Load();
 
-            try
-            {
-                //uow.Entry<Permission>(Find(id)).Collection(m => m.RolePermissions).Load();
-                
-                uow.Set<Person>().Remove(
-                    uow.Get<Person>(m => m.Id == id).First()
-                    );
-                result = userService.Succeed(Alert.SuccessDelete);
+            uow.Set<Person>().Remove(
+                uow.Get<Person>(m => m.Id.Equals(id)).First()
+                );
 
-                await uow.CommitAsync();
-            }
-            catch (Exception)
-            {
-                result = userService.Failed(Alert.ErrorInDelete);
-            }
+            await uow.CommitAsync();
 
-            return result;
+            return userService.Succeed(Alert.SuccessDelete);
         }
     }
 }

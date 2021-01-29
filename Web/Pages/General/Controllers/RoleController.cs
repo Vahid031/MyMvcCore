@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Infrastructure.Entities;
 using Infrastructure.Enums;
 using Microsoft.AspNetCore.Authorization;
@@ -37,7 +38,7 @@ namespace Web.Pages.General.Controllers
         }
 
         [HttpPost]
-        public IActionResult _Update(int id)
+        public IActionResult _Update(Guid id)
         {
             var model = new CreateRoleViewModel()
             {
@@ -64,7 +65,7 @@ namespace Web.Pages.General.Controllers
         }
 
         [HttpPost]
-        public JsonResult _Delete(int id)
+        public JsonResult _Delete(Guid id)
         {
             return Json(roleService.Remove(id));
         }
@@ -76,7 +77,7 @@ namespace Web.Pages.General.Controllers
         }
 
         [HttpPost]
-        public JsonResult _Permission(int id)
+        public JsonResult _Permission(Guid id)
         {
             return Json(roleService.Permission(id));
         }

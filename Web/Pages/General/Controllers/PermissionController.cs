@@ -13,6 +13,7 @@ using Infrastructure.Entities;
 using Infrastructure.Enums;
 using Infrastructure.Common;
 using System.Threading.Tasks;
+using System;
 
 namespace Web.Pages.General.Controllers
 {
@@ -72,7 +73,7 @@ namespace Web.Pages.General.Controllers
         }
 
         [HttpPost]
-        public IActionResult _Update(int id)
+        public IActionResult _Update(Guid id)
         {
             var model = new CreatePermissionViewModel()
             {
@@ -111,25 +112,25 @@ namespace Web.Pages.General.Controllers
         }
 
         [HttpPost]
-        public JsonResult _Delete(int id)
+        public JsonResult _Delete(Guid id)
         {
             return Json(permissionService.Remove(id));
         }
 
         [HttpPost]
-        public JsonResult ChangePeriority(int id, int parentId)
+        public JsonResult ChangePeriority(Guid id, Guid parentId)
         {
             return Json(permissionService.ChangePeriority(id, parentId));
         }
 
         [HttpPost]
-        public JsonResult SetRolePermission(int roleId, int[] permissionId)
+        public JsonResult SetRolePermission(Guid roleId, Guid[] permissionId)
         {
             return Json(permissionService.SetRolePermission(roleId, permissionId));
         }
 
         [HttpPost]
-        public JsonResult SetMemberPermission(int memberId, int[] permissionId, bool isDenied)
+        public JsonResult SetMemberPermission(Guid memberId, Guid[] permissionId, bool isDenied)
         {
             return Json(permissionService.SetMemberPermission(memberId, permissionId, isDenied));
         }

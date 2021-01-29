@@ -29,12 +29,12 @@ namespace Services.UserService
             this.uow = uow;
             this.memoryCache = memoryCache;
         }
-        public int MemberId
+        public Guid MemberId
         {
             get
             {
-                var member = context.User.Claims.FirstOrDefault(m => m.Type.Equals("MemberId"));
-                return int.Parse(member == null ? "0" : member.Value);
+                var member = context.User.Claims.FirstOrDefault(m => m.Type.Equals("MemberId")).ToString();
+                return Guid.Parse(member);
             }
         }
 

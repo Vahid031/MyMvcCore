@@ -21,19 +21,21 @@ namespace DatabaseContext.Migrations
 
             modelBuilder.Entity("DomainModels.General.Log", b =>
                 {
-                    b.Property<int?>("Id")
+                    b.Property<Guid?>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CreateDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("MemberId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("MemberId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("RowId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("RowId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<byte?>("State")
                         .HasColumnType("tinyint")
@@ -43,7 +45,12 @@ namespace DatabaseContext.Migrations
                         .HasColumnType("nvarchar(40)")
                         .HasMaxLength(40);
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasAnnotation("SqlServer:Clustered", false);
+
+                    b.HasIndex("CreateDate")
+                        .IsUnique()
+                        .HasAnnotation("SqlServer:Clustered", true);
 
                     b.HasIndex("MemberId");
 
@@ -52,13 +59,15 @@ namespace DatabaseContext.Migrations
 
             modelBuilder.Entity("DomainModels.General.LogDetail", b =>
                 {
-                    b.Property<int?>("Id")
+                    b.Property<Guid?>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("LogId")
-                        .HasColumnType("int");
+                    b.Property<DateTime?>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("LogId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("PropertyName")
                         .HasColumnType("nvarchar(40)")
@@ -68,7 +77,12 @@ namespace DatabaseContext.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasAnnotation("SqlServer:Clustered", false);
+
+                    b.HasIndex("CreateDate")
+                        .IsUnique()
+                        .HasAnnotation("SqlServer:Clustered", true);
 
                     b.HasIndex("LogId");
 
@@ -77,26 +91,33 @@ namespace DatabaseContext.Migrations
 
             modelBuilder.Entity("DomainModels.General.Member", b =>
                 {
-                    b.Property<int?>("Id")
+                    b.Property<Guid?>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool?>("Active")
                         .HasColumnType("bit");
+
+                    b.Property<DateTime?>("CreateDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Password")
                         .HasColumnType("nvarchar(64)")
                         .HasMaxLength(64);
 
-                    b.Property<int?>("PersonId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("PersonId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("UserName")
                         .HasColumnType("nvarchar(25)")
                         .HasMaxLength(25);
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasAnnotation("SqlServer:Clustered", false);
+
+                    b.HasIndex("CreateDate")
+                        .IsUnique()
+                        .HasAnnotation("SqlServer:Clustered", true);
 
                     b.HasIndex("PersonId");
 
@@ -105,21 +126,28 @@ namespace DatabaseContext.Migrations
 
             modelBuilder.Entity("DomainModels.General.MemberPermission", b =>
                 {
-                    b.Property<int?>("Id")
+                    b.Property<Guid?>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CreateDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool?>("IsDenied")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("MemberId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("MemberId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("PermissionId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("PermissionId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasAnnotation("SqlServer:Clustered", false);
+
+                    b.HasIndex("CreateDate")
+                        .IsUnique()
+                        .HasAnnotation("SqlServer:Clustered", true);
 
                     b.HasIndex("MemberId");
 
@@ -130,21 +158,23 @@ namespace DatabaseContext.Migrations
 
             modelBuilder.Entity("DomainModels.General.Permission", b =>
                 {
-                    b.Property<int?>("Id")
+                    b.Property<Guid?>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Action")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("nvarchar(25)")
+                        .HasMaxLength(25);
 
                     b.Property<bool?>("Active")
                         .HasColumnType("bit");
 
                     b.Property<string>("Controller")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("nvarchar(25)")
+                        .HasMaxLength(25);
+
+                    b.Property<DateTime?>("CreateDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Icon")
                         .HasColumnType("nvarchar(25)")
@@ -153,8 +183,8 @@ namespace DatabaseContext.Migrations
                     b.Property<int?>("Order")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ParentId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(25)")
@@ -163,7 +193,12 @@ namespace DatabaseContext.Migrations
                     b.Property<bool?>("Visible")
                         .HasColumnType("bit");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasAnnotation("SqlServer:Clustered", false);
+
+                    b.HasIndex("CreateDate")
+                        .IsUnique()
+                        .HasAnnotation("SqlServer:Clustered", true);
 
                     b.HasIndex("ParentId");
 
@@ -172,12 +207,14 @@ namespace DatabaseContext.Migrations
 
             modelBuilder.Entity("DomainModels.General.Person", b =>
                 {
-                    b.Property<int?>("Id")
+                    b.Property<Guid?>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("Birthday")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("CreateDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
@@ -206,26 +243,38 @@ namespace DatabaseContext.Migrations
                         .HasColumnType("nvarchar(11)")
                         .HasMaxLength(11);
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasAnnotation("SqlServer:Clustered", false);
+
+                    b.HasIndex("CreateDate")
+                        .IsUnique()
+                        .HasAnnotation("SqlServer:Clustered", true);
 
                     b.ToTable("Persons","General");
                 });
 
             modelBuilder.Entity("DomainModels.General.Role", b =>
                 {
-                    b.Property<int?>("Id")
+                    b.Property<Guid?>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("ParentId")
-                        .HasColumnType("int");
+                    b.Property<DateTime?>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasAnnotation("SqlServer:Clustered", false);
+
+                    b.HasIndex("CreateDate")
+                        .IsUnique()
+                        .HasAnnotation("SqlServer:Clustered", true);
 
                     b.HasIndex("ParentId");
 
@@ -234,18 +283,25 @@ namespace DatabaseContext.Migrations
 
             modelBuilder.Entity("DomainModels.General.RoleMember", b =>
                 {
-                    b.Property<int?>("Id")
+                    b.Property<Guid?>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("MemberId")
-                        .HasColumnType("int");
+                    b.Property<DateTime?>("CreateDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<int?>("RoleId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("MemberId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
+                    b.Property<Guid?>("RoleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id")
+                        .HasAnnotation("SqlServer:Clustered", false);
+
+                    b.HasIndex("CreateDate")
+                        .IsUnique()
+                        .HasAnnotation("SqlServer:Clustered", true);
 
                     b.HasIndex("MemberId");
 
@@ -256,18 +312,25 @@ namespace DatabaseContext.Migrations
 
             modelBuilder.Entity("DomainModels.General.RolePermission", b =>
                 {
-                    b.Property<int?>("Id")
+                    b.Property<Guid?>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("PermissionId")
-                        .HasColumnType("int");
+                    b.Property<DateTime?>("CreateDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<int?>("RoleId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("PermissionId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
+                    b.Property<Guid?>("RoleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id")
+                        .HasAnnotation("SqlServer:Clustered", false);
+
+                    b.HasIndex("CreateDate")
+                        .IsUnique()
+                        .HasAnnotation("SqlServer:Clustered", true);
 
                     b.HasIndex("PermissionId");
 

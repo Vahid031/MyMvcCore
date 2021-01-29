@@ -6,12 +6,8 @@ using Infrastructure.Validation;
 namespace DomainModels.General
 {
     [Table("Persons", Schema = "General")]
-    public class Person
+    public class Person : BaseEntity
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int? Id { get; set; }
-
         [Display(Name = "نام")]
         [StringLength(25, ErrorMessage = "حداکثر 25 کاراکتر")]
         public string FirstName { get; set; }

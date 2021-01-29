@@ -8,12 +8,8 @@ using System.Text;
 namespace DomainModels.General
 {
     [Table("Members", Schema = "General")]
-    public class Member
+    public class Member : BaseEntity
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int? Id { get; set; }
-
         [StringLength(25, MinimumLength = 1, ErrorMessage = "حد اکثر 25 کاراکتر")]
         [Display(Name = "نام کاربری")]
         public string UserName { get; set; }
@@ -34,7 +30,7 @@ namespace DomainModels.General
         [Display(Name = "فعال")]
         public bool? Active { get; set; }
 
-        public int? PersonId { get; set; }
+        public Guid? PersonId { get; set; }
 
         [ForeignKey(nameof(PersonId))]
         public virtual Person Person { get; set; }

@@ -6,16 +6,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace DomainModels.General
 {
     [Table("MemberPermissions", Schema = "General")]
-    public class MemberPermission
+    public class MemberPermission : BaseEntity
     {
-        [Key]
-        public int? Id { get; set; }
-
         [DisplayName("شناسه کاربر")]
-        public int? MemberId { get; set; }
+        public Guid? MemberId { get; set; }
 
         [DisplayName("شناسه مجوز")]
-        public int? PermissionId { get; set; }
+        public Guid? PermissionId { get; set; }
 
         [ForeignKey(nameof(PermissionId))]
         public virtual Permission Permission { get; set; }

@@ -8,12 +8,8 @@ using Infrastructure.Validation;
 namespace DomainModels.General
 {
     [Table("Permissions", Schema = "General")]
-    public class Permission
+    public class Permission : BaseEntity
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int? Id { get; set; }
-
         [Necessary]
         [DefaultValue("")]
         [StringLength(25, MinimumLength = 3, ErrorMessage = "حد اکثر 25 کاراکتر")]
@@ -42,7 +38,7 @@ namespace DomainModels.General
         public bool? Active { get; set; }
 
         [Display(Name = "والد")]
-        public int? ParentId { get; set; }
+        public Guid? ParentId { get; set; }
 
         [DefaultValue("")]
         [Display(Name = "Icon")]

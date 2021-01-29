@@ -46,10 +46,10 @@ namespace Services.General.RoleService
             });
         }
 
-        public IEnumerable<Tree> Permission(int id)
+        public IEnumerable<Tree> Permission(Guid id)
         {
 
-            var role = uow.Set<RolePermission>().AsQueryable().Where(m => id == (m.RoleId.HasValue ? m.RoleId.Value : 0)).ToList();
+            var role = uow.Set<RolePermission>().AsQueryable().Where(m => id.Equals(m.RoleId)).ToList();
 
 
             return uow.Set<Permission>().AsEnumerable().Select(Result => new Tree()
@@ -91,7 +91,7 @@ namespace Services.General.RoleService
             return result;
         }
 
-        public async Task<Response> Remove(int id)
+        public async Task<Response> Remove(Guid id)
         {
             Response result;
 

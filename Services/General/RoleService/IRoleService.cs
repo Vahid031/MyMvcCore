@@ -1,6 +1,7 @@
 using DomainModels.General;
 using Infrastructure.Entities;
 using Services.GenericService;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ViewModels.General.RoleViewModel;
@@ -13,10 +14,10 @@ namespace Services.General.RoleService
 
         IEnumerable<Tree> Tree();
 
-        IEnumerable<Tree> Permission(int id);
+        IEnumerable<Tree> Permission(Guid id);
 
         Task<Response> Save(CreateRoleViewModel model);
 
-        Task<Response> Remove(int id);
+        Task<Response> Remove(Guid id);
     }
 }

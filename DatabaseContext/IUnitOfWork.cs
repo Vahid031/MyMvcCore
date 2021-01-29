@@ -13,9 +13,9 @@ namespace DatabaseContext
 
         DbSet<T> Set<T>() where T : class;
 
-        void Commit(int? memberId = null);
+        void Commit(Guid? memberId = null);
 
-        Task CommitAsync(int? memberId = null);
+        Task CommitAsync(Guid? memberId = null);
 
         EntityEntry<T> Entry<T>(T Entity) where T : class;
 

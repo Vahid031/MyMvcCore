@@ -67,11 +67,11 @@ namespace Services.General.PermissionService
             });
         }
 
-        public async Task<Response> ChangePeriority(int id, int parentId)
+        public async Task<Response> ChangePeriority(Guid id, Guid parentId)
         {
             var permission = Find(id);
 
-            var siblings = Get().Where(m => m.ParentId == parentId).OrderBy(m => m.Order).ToList();
+            var siblings = Get().Where(m => m.ParentId.Equals(parentId)).OrderBy(m => m.Order).ToList();
 
             int i;
             for (i = 0; i < siblings.Count(); i++)
@@ -87,7 +87,7 @@ namespace Services.General.PermissionService
             return userService.Succeed();
         }
 
-        public async Task<Response> SetRolePermission(int roleId, int[] permissionId)
+        public async Task<Response> SetRolePermission(Guid roleId, Guid[] permissionId)
         {
             uow.Set<RolePermission>().RemoveRange(uow.Get<RolePermission>(m => m.RoleId == roleId));
 
@@ -108,7 +108,7 @@ namespace Services.General.PermissionService
             return userService.Succeed();
         }
 
-        public async Task<Response> SetMemberPermission(int _memberId, int[] permissionId, bool isDenied)
+        public async Task<Response> SetMemberPermission(Guid _memberId, Guid[] permissionId, bool isDenied)
         {
             uow.Set<MemberPermission>().RemoveRange(
                 uow.Get<MemberPermission>(m => m.MemberId == _memberId && (m.IsDenied == isDenied || permissionId.Contains(m.PermissionId.Value)))
@@ -159,7 +159,7 @@ namespace Services.General.PermissionService
             return result;
         }
 
-        public async Task<Response> Remove(int id)
+        public async Task<Response> Remove(Guid id)
         {
             Response result;
 

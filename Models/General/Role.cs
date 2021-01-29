@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -5,12 +6,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace DomainModels.General
 {
     [Table("Roles", Schema = "General")]
-    public class Role
+    public class Role : BaseEntity
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int? Id { get; set; }
-
         [StringLength(50, MinimumLength=1, ErrorMessage="حد اکثر 50 کاراکتر")]
         [Display(Name="عنوان نقش")]
         public string Title { get; set; }
@@ -20,11 +17,9 @@ namespace DomainModels.General
         public virtual ICollection<RolePermission> RolePermissions { get; set; }
 
         [Display(Name = "والد")]
-        public int? ParentId { get; set; }
+        public Guid? ParentId { get; set; }
 
         [ForeignKey(nameof(ParentId))]
         public virtual Role RoleParent { get; set; }
-
-
     }
 }

@@ -5,42 +5,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20200312184733_MyFirstMigration.cs" />
-    <Compile Remove="Migrations\20200312184733_MyFirstMigration.Designer.cs" />
-    <Compile Remove="Migrations\20200312184930_MyFirstMigration.cs" />
-    <Compile Remove="Migrations\20200312184930_MyFirstMigration.Designer.cs" />
-    <Compile Remove="Migrations\20200325193905_InitialMigration1.cs" />
-    <Compile Remove="Migrations\20200325193905_InitialMigration1.Designer.cs" />
-    <Compile Remove="Migrations\20200325195529_InitialMigration2.cs" />
-    <Compile Remove="Migrations\20200325195529_InitialMigration2.Designer.cs" />
-    <Compile Remove="Migrations\20200325195651_InitialMigration1.cs" />
-    <Compile Remove="Migrations\20200325195651_InitialMigration1.Designer.cs" />
-    <Compile Remove="Migrations\20200325200056_InitialMigration1.cs" />
-    <Compile Remove="Migrations\20200325200056_InitialMigration1.Designer.cs" />
-    <Compile Remove="Migrations\20200327120808_migration_1399.01.08.cs" />
-    <Compile Remove="Migrations\20200327120808_migration_1399.01.08.Designer.cs" />
-    <Compile Remove="Migrations\20200327143328_migration_1399.01.08_2.cs" />
-    <Compile Remove="Migrations\20200327143328_migration_1399.01.08_2.Designer.cs" />
-    <Compile Remove="Migrations\20200330092730_m_1399.01.10.cs" />
-    <Compile Remove="Migrations\20200330092730_m_1399.01.10.Designer.cs" />
-    <Compile Remove="Migrations\20200330155334_m_1399.01.10.cs" />
-    <Compile Remove="Migrations\20200330155334_m_1399.01.10.Designer.cs" />
-    <Compile Remove="Migrations\20200330155642_m_1399.01.10.cs" />
-    <Compile Remove="Migrations\20200330155642_m_1399.01.10.Designer.cs" />
-    <Compile Remove="Migrations\20200331202702_m_1399.01.12.cs" />
-    <Compile Remove="Migrations\20200331202702_m_1399.01.12.Designer.cs" />
-    <Compile Remove="Migrations\20200808120111_13990516.cs" />
-    <Compile Remove="Migrations\20200808120111_13990516.Designer.cs" />
-    <Compile Remove="Migrations\20200808130007_DB.cs" />
-    <Compile Remove="Migrations\20200808130007_DB.Designer.cs" />
-    <Compile Remove="Migrations\20200808131056_DB_1.cs" />
-    <Compile Remove="Migrations\20200808131056_DB_1.Designer.cs" />
-    <Compile Remove="Migrations\20200910121752_DB_4.cs" />
-    <Compile Remove="Migrations\20200910121752_DB_4.Designer.cs" />
-    <Compile Remove="Migrations\20201004062122_DB_4.cs" />
-    <Compile Remove="Migrations\20201004062122_DB_4.Designer.cs" />
-    <Compile Remove="Migrations\20201007100533_DB_5.cs" />
-    <Compile Remove="Migrations\20201007100533_DB_5.Designer.cs" />
+    <Compile Remove="Migrations\20210129152105_MigrationModel_002.cs" />
+    <Compile Remove="Migrations\20210129152105_MigrationModel_002.Designer.cs" />
+    <Compile Remove="Migrations\20210129152152_MigrationModel_001.cs" />
+    <Compile Remove="Migrations\20210129152152_MigrationModel_001.Designer.cs" />
+    <Compile Remove="Migrations\20210129153141_MigrationModel_001.cs" />
+    <Compile Remove="Migrations\20210129153141_MigrationModel_001.Designer.cs" />
+    <Compile Remove="Migrations\20210129154451_MigrationModel_001.cs" />
+    <Compile Remove="Migrations\20210129154451_MigrationModel_001.Designer.cs" />
+    <Compile Remove="Migrations\20210129155203_MigrationModel_001.cs" />
+    <Compile Remove="Migrations\20210129155203_MigrationModel_001.Designer.cs" />
+    <Compile Remove="Migrations\20210129155453_MigrationModel_001.cs" />
+    <Compile Remove="Migrations\20210129155453_MigrationModel_001.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

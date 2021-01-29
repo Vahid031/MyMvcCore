@@ -6,18 +6,14 @@ using System.Collections.Generic;
 namespace DomainModels.General
 {
     [Table("Logs", Schema = "General")]
-    public class Log
+    public class Log : BaseEntity
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int? Id { get; set; }
-
         [Display(Name = "نام جدول")]
         [StringLength(40, ErrorMessage = "حداکثر 40 کاراکتر")]
         public string TableName { get; set; }
 
         [Display(Name = "شناسه سطر")]
-        public int? RowId { get; set; }
+        public Guid? RowId { get; set; }
 
         [Display(Name = "نوع عملیات")]
         [StringLength(10, ErrorMessage = "حداکثر 10 کاراکتر")]
@@ -28,7 +24,7 @@ namespace DomainModels.General
         public DateTime? Date { get; set; }
 
         [Display(Name = "کاربر ثبت کننده")]
-        public int? MemberId { get; set; }
+        public Guid? MemberId { get; set; }
 
         [ForeignKey(nameof(MemberId))]
         public virtual Member Member { get; set; }
