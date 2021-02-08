@@ -154,16 +154,16 @@ $.fn.GridView = function (options) {
     table.setAttribute('data-order', params.order);
     table.setAttribute('disable', 'dasable');
 
-    //$(table).find('tbody tr:first-child *[name]').each(function () {
-    //    var param = $(this).attr('name');
-    //    var value = $(this).val();
+    $(table).find('tbody tr:first-child *[name]').each(function () {
+        var param = $(this).attr('name');
+        var value = $(this).val();
 
-    //    if (value.length > 0)
-    //        params[param] = value;
-    //    else if (params[param])
-    //        $(this).val(params[param]);
+        if (value.length > 0)
+            params[param] = value;
+        else if (params[param])
+            $(this).val(params[param]);
 
-    //});
+    });
 
 
     if (columns == undefined) {
@@ -438,7 +438,7 @@ $.fn.GridHandler = function () {
         $(this).parents("tr").addClass("selected");
     });
 
-    table.find('tbody tr:first-child').unbind('change').on('change', function (event) {
+    table.find('tbody tr:first-child').unbind('change').on('change', function (e) {
 
         if (table.attr('disable') != undefined)
             return;

@@ -123,7 +123,7 @@ namespace DatabaseContext.Context
                 Parallel.ForEach(entry.Entity.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)
                     .Where(m => !Attribute.IsDefined(m, typeof(KeyAttribute)))
                     .Where(m => !Attribute.IsDefined(m, typeof(NotMappedAttribute)))
-                    .Where(m => ExtensionMethod.predefinedTypes.Any(i => i.Name == m.PropertyType.Name)), item =>
+                    .Where(m => ExtentionMethods.predefinedTypes.Any(i => i.Name == m.PropertyType.Name)), item =>
                     {
                         LogDetail logDetail = new LogDetail()
                         {

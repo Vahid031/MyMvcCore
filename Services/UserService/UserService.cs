@@ -11,9 +11,9 @@ using ViewModels.General;
 using Infrastructure.Entities;
 using Infrastructure.Enums;
 using System;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace Services.UserService
 {
@@ -33,8 +33,8 @@ namespace Services.UserService
         {
             get
             {
-                var member = context.User.Claims.FirstOrDefault(m => m.Type.Equals("MemberId")).ToString();
-                return new Guid(member.Replace("MemberId:","").Trim());
+                var guid = context.User.Claims.First(m => m.Type.Equals(ClaimTypes.NameIdentifier)).Value;
+                return new Guid(guid);
             }
         }
 
@@ -66,12 +66,19 @@ namespace Services.UserService
             if (!member.Password.Equals(Hashing.MultiEncrypt(loginViewModel.Password)))
                 return false;
 
+            var user = new User()
+            {
+                UserName = loginViewModel.UserName,
+                PasswordHash = Hashing.MultiEncrypt(loginViewModel.Password),
+                Id = member.Id.ToString()
+
+            };
 
             var claims = new List<Claim>
                 {
-                    new Claim("user", loginViewModel.UserName),
-                    new Claim("role", "Admin"),
-                    new Claim("MemberId",member.Id.ToString())
+                    new Claim(ClaimTypes.Name, loginViewModel.UserName),
+                    new Claim(ClaimTypes.Role, "Admin"),
+                    new Claim(ClaimTypes.NameIdentifier,member.Id.ToString())
                 };
 
             //foreach (var permission in await GetUserPermission())
@@ -80,7 +87,7 @@ namespace Services.UserService
             //}
             //Task.WaitAll();
 
-            await context.SignInAsync(new ClaimsPrincipal(new ClaimsIdentity(claims, "Cookies", "user", "role")));
+            await context.SignInAsync(new ClaimsPrincipal(new ClaimsIdentity(claims, "Cookies", ClaimTypes.Name, ClaimTypes.Role)));
 
             return true;
         }

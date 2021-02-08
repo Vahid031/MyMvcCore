@@ -49,12 +49,14 @@ namespace Web.Pages.General.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> _Create(CreateMemberViewModel model)
+        public async Task<IActionResult> _Create(CreateMemberViewModel model)
         {
             if (ModelState.IsValid)
                 return Json(await memberService.Save(model));
             else
                 return Json(userService.Failed("اطلاعات ورودی صحیح نیست", AlertType.warning));
+
+            //return Problem();
         }
 
         [HttpPost]

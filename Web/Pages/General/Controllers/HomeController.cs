@@ -7,7 +7,7 @@ using Services.UserService;
 
 namespace Web.Pages.General.Controllers
 {
-    [Authorize("Vahid")]
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> logger;
@@ -21,6 +21,7 @@ namespace Web.Pages.General.Controllers
 
         public IActionResult Index()
         {
+            var id = userService.MemberId;
             return View();
         }
 

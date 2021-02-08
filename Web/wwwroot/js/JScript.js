@@ -38,30 +38,6 @@ function Messages(type, message) {
     $('#Alert').hide().slideDown(300).delay(3000).slideUp(300);
 }
 
-//function GotoUrl(url) {
-//    if (url == undefined)
-//        url = '../'
-
-//    Ajax('Post', '../Account/Check_Authentication', [], function (data, status, xhr) {
-
-//        if (JSON.parse(data) == true) {
-//            $('#Content').PartialView({
-//                url: url
-//            });
-//        }
-//        else {
-//            $('#TopNavigation').hide();
-//            $('#RightNavigation').hide();
-//            $("main[role='main']").css("padding", "0");
-
-//            $('#Content').PartialView({
-//                url: '../Account/Index'
-//            });
-
-//        }
-//    });
-//}
-
 function AJAX(params) {
     $.ajax({
         type: params.type == undefined ? 'GET' : params.type,
@@ -129,10 +105,10 @@ function Popup(title, type, url, data, callBack, popupSize, popupContainer) {
 }
 
 function CreateMenu() {
-
+    debugger
 
     $(".sidebar nav ul").remove();
-    var ul_sidebar = FillMenu(permissions, 1, 'sidebar');
+    var ul_sidebar = FillMenu(permissions, null, 'sidebar');
 
     $(ul_sidebar).addClass("navbar-nav mb-5");
     $(ul_sidebar).attr("id", "sidebar");
