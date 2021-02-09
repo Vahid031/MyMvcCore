@@ -16,12 +16,9 @@ namespace Services.General.RoleService
 
     public class RoleService : GenericService<Role>, IRoleService
     {
-        private readonly IUserService userService;
-
-        public RoleService(IUnitOfWork uow, IUserService userService)
+        public RoleService(IUnitOfWork uow)
             : base(uow)
         {
-            this.userService = userService;
         }
 
         public IEnumerable<ListRoleViewModel> GetAll(ListRoleViewModel list, ref Paging pg)
@@ -64,51 +61,22 @@ namespace Services.General.RoleService
             });
         }
 
-        public async Task<Response> Save(CreateRoleViewModel model)
+        public async Task Save(CreateRoleViewModel model)
         {
-            Response result;
+            if (model.Role.Id == null)
+                Update(model.Role);
+            else
+                Insert(model.Role);
 
-            try
-            {
-                if (model.Role.Id == null)
-                {
-                    Update(model.Role);
-                    result = userService.Succeed("اطلاعات با موفقیت ویرایش شد");
-                }
-                else
-                {
-                    Insert(model.Role);
-                    result = userService.Succeed("اطلاعات با موفقیت ثبت شد");
-                }
-
-                await uow.CommitAsync();
-            }
-            catch (Exception)
-            {
-                result = userService.Failed("مشکلی در درج اطلاعات به وجود آمده است");
-            }
-
-            return result;
+            await uow.CommitAsync();
         }
 
-        public async Task<Response> Remove(Guid id)
+        public async Task Remove(Guid id)
         {
-            Response result;
+            //uow.Entry<Permission>(Find(id)).Collection(m => m.RolePermissions).Load();
+            Delete(id);
 
-            try
-            {
-                //uow.Entry<Permission>(Find(id)).Collection(m => m.RolePermissions).Load();
-                Delete(id);
-                result = userService.Succeed("اطلاعات با موفقیت حذف شد");
-
-                await uow.CommitAsync();
-            }
-            catch (Exception)
-            {
-                result = userService.Failed("مشکلی در درج اطلاعات به وجود آمده است");
-            }
-
-            return result;
+            await uow.CommitAsync();
         }
     }
 }

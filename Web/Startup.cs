@@ -16,6 +16,8 @@ using Microsoft.AspNetCore.Http;
 using Services.UserService;
 using DatabaseContext;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
 
 namespace Web
 {
@@ -55,9 +57,9 @@ namespace Web
             services.Configure<RazorViewEngineOptions>(options =>
             {
                 options.ViewLocationFormats.Clear();
-                options.ViewLocationFormats.Add("/Pages/General/Views/{1}/{0}" + RazorViewEngine.ViewExtension);
-                options.ViewLocationFormats.Add("/Pages/BaseInformation/Views/{1}/{0}" + RazorViewEngine.ViewExtension);
-                options.ViewLocationFormats.Add("/Pages/General/Views/Shared/{0}" + RazorViewEngine.ViewExtension);
+                options.ViewLocationFormats.Add("/Areas/General/Views/{1}/{0}" + RazorViewEngine.ViewExtension);
+                options.ViewLocationFormats.Add("/Areas/BaseInformation/Views/{1}/{0}" + RazorViewEngine.ViewExtension);
+                options.ViewLocationFormats.Add("/Areas/General/Views/Shared/{0}" + RazorViewEngine.ViewExtension);
             });
 
             services.AddRazorPages();
@@ -109,12 +111,18 @@ namespace Web
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
                 var context = serviceScope.ServiceProvider.GetRequiredService<UnitOfWork>();
-                //context.Database.Migrate();
                 //context.Database.EnsureDeleted();
                 //context.Database.EnsureCreated();
+                //context.Database.Migrate();
             }
 
             app.UseStaticFiles();
+
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Areas/General/Business")),
+                RequestPath = new PathString("/General/Business")
+            });
 
             app.UseRouting();
 

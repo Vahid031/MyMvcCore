@@ -16,7 +16,7 @@ namespace Services.General.PermissionService
 
     public class PermissionService : GenericService<Permission>, IPermissionService
     {
-        public IUserService userService { get; }
+        public readonly IUserService userService;
 
         public PermissionService(IUnitOfWork uow, IUserService userService)
             : base(uow)
@@ -67,7 +67,7 @@ namespace Services.General.PermissionService
             });
         }
 
-        public async Task<Response> ChangePeriority(Guid id, Guid parentId)
+        public async Task ChangePeriority(Guid id, Guid parentId)
         {
             var permission = Find(id);
 
@@ -83,11 +83,9 @@ namespace Services.General.PermissionService
             permission.Order = i + 1;
 
             await uow.CommitAsync(userService.MemberId);
-
-            return userService.Succeed();
         }
 
-        public async Task<Response> SetRolePermission(Guid roleId, Guid[] permissionId)
+        public async Task SetRolePermission(Guid roleId, Guid[] permissionId)
         {
             uow.Set<RolePermission>().RemoveRange(uow.Get<RolePermission>(m => m.RoleId == roleId));
 
@@ -104,11 +102,9 @@ namespace Services.General.PermissionService
             uow.Set<RolePermission>().AddRange(list);
 
             await uow.CommitAsync(userService.MemberId);
-
-            return userService.Succeed();
         }
 
-        public async Task<Response> SetMemberPermission(Guid _memberId, Guid[] permissionId, bool isDenied)
+        public async Task SetMemberPermission(Guid _memberId, Guid[] permissionId, bool isDenied)
         {
             uow.Set<MemberPermission>().RemoveRange(
                 uow.Get<MemberPermission>(m => m.MemberId == _memberId && (m.IsDenied == isDenied || permissionId.Contains(m.PermissionId.Value)))
@@ -128,55 +124,24 @@ namespace Services.General.PermissionService
             uow.Set<MemberPermission>().AddRange(list);
 
             await uow.CommitAsync(userService.MemberId);
-
-            return userService.Succeed();
         }
 
-        public async Task<Response> Save(CreatePermissionViewModel model)
+        public async Task Save(CreatePermissionViewModel model)
         {
-            Response result;
+            if (model.Permission.Id == null)
+                Update(model.Permission);
+            else
+                Insert(model.Permission);
 
-            try
-            {
-                if (model.Permission.Id == null)
-                {
-                    Update(model.Permission);
-                    result = userService.Succeed(Alert.SuccessUpdate);
-                }
-                else
-                {
-                    Insert(model.Permission);
-                    result = userService.Succeed(Alert.SuccessInsert);
-                }
-
-                await uow.CommitAsync();
-            }
-            catch (Exception)
-            {
-                result = userService.Failed(Alert.ErrorInSystem);
-            }
-
-            return result;
+            await uow.CommitAsync();
         }
 
-        public async Task<Response> Remove(Guid id)
+        public async Task Remove(Guid id)
         {
-            Response result;
+            //uow.Entry<Permission>(Find(id)).Collection(m => m.RolePermissions).Load();
+            Delete(id);
 
-            try
-            {
-                //uow.Entry<Permission>(Find(id)).Collection(m => m.RolePermissions).Load();
-                Delete(id);
-                result = userService.Succeed(Alert.SuccessDelete);
-
-                await uow.CommitAsync();
-            }
-            catch (Exception)
-            {
-                result = userService.Failed(Alert.ErrorInSystem);
-            }
-
-            return result;
+            await uow.CommitAsync();
         }
     }
 }

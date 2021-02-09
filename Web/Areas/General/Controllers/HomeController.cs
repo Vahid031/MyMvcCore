@@ -10,18 +10,14 @@ namespace Web.Pages.General.Controllers
     [Authorize]
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> logger;
-        private readonly IUserService userService;
 
-        public HomeController(ILogger<HomeController> logger, IUserService userService)
+        public HomeController()
         {
-            this.logger = logger;
-            this.userService = userService;
+
         }
 
         public IActionResult Index()
         {
-            var id = userService.MemberId;
             return View();
         }
 

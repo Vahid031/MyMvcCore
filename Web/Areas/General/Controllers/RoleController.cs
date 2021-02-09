@@ -15,15 +15,11 @@ namespace Web.Pages.General.Controllers
     [Authorize("Vahid")]
     public class RoleController : Controller
     {
-        private readonly ILogger<RoleController> logger;
         private readonly IRoleService roleService;
-        private readonly IUserService userService;
 
-        public RoleController(ILogger<RoleController> logger, IRoleService roleService, IUserService userService)
+        public RoleController(IRoleService roleService)
         {
-            this.logger = logger;
             this.roleService = roleService;
-            this.userService = userService;
         }
 
         public IActionResult Index()
@@ -49,20 +45,20 @@ namespace Web.Pages.General.Controllers
             return PartialView("_Create", model);
         }
 
-        [HttpPost]
-        public JsonResult _Create(CreateRoleViewModel model)
-        {
-            if (ModelState.IsValid)
-                return Json(roleService.Save(model));
-            else
-                return Json(userService.Failed(Alert.ErrorInInputParameter));
-        }
+        //[HttpPost]
+        //public JsonResult _Create(CreateRoleViewModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //        return Json(roleService.Save(model));
+        //    else
+        //        return Json(userService.Failed(Alert.ErrorInInputParameter));
+        //}
 
-        [HttpPost]
-        public JsonResult _List(ListRoleViewModel list, Paging pg)
-        {
-            return Json(userService.Result(roleService.GetAll(list, ref pg), pg));
-        }
+        //[HttpPost]
+        //public JsonResult _List(ListRoleViewModel list, Paging pg)
+        //{
+        //    return Json(userService.Result(roleService.GetAll(list, ref pg), pg));
+        //}
 
         [HttpPost]
         public JsonResult _Delete(Guid id)

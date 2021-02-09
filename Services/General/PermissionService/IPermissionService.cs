@@ -14,14 +14,14 @@ namespace Services.General.PermissionService
 
         IEnumerable<Tree> Tree();
 
-        Task<Response> ChangePeriority(Guid id, Guid parentId);
+        Task ChangePeriority(Guid id, Guid parentId);
 
-        Task<Response> SetRolePermission(Guid roleId, Guid[] permissionId);
+        Task SetRolePermission(Guid roleId, Guid[] permissionId);
 
-        Task<Response> SetMemberPermission(Guid memberId, Guid[] permissionId, bool isDenied);
+        Task SetMemberPermission(Guid memberId, Guid[] permissionId, bool isDenied);
 
-        Task<Response> Save(CreatePermissionViewModel model);
+        Task Save(CreatePermissionViewModel model);
 
-        Task<Response> Remove(Guid Id);
+        Task Remove(Guid Id);
     }
 }

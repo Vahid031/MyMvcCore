@@ -19,15 +19,12 @@ namespace Web.Pages.General.Controllers
     {
         private readonly ILogger<MemberController> logger;
         private readonly IMemberService memberService;
-        private readonly IUserService userService;
 
         public MemberController(ILogger<MemberController> logger,
-                                IMemberService memberService,
-                                IUserService userService)
+                                IMemberService memberService)
         {
             this.logger = logger;
             this.memberService = memberService;
-            this.userService = userService;
         }
 
         [HttpGet]
@@ -45,36 +42,36 @@ namespace Web.Pages.General.Controllers
         [HttpPost]
         public IActionResult _Update(Guid id)
         {
-            return PartialView("_Create", memberService.Get(id));
+            return PartialView(nameof(_Create), memberService.Get(id));
         }
 
         [HttpPost]
-        public async Task<IActionResult> _Create(CreateMemberViewModel model)
+        public IActionResult _Create(CreateMemberViewModel model)
         {
-            if (ModelState.IsValid)
-                return Json(await memberService.Save(model));
-            else
-                return Json(userService.Failed("اطلاعات ورودی صحیح نیست", AlertType.warning));
+            if (!ModelState.IsValid)
+                return BadRequest(Alert.ErrorInInputParameter.GetMessage());
 
-            //return Problem();
+            memberService.Save(model);
+            return Ok();
         }
 
         [HttpPost]
-        public JsonResult _List(ListMemberViewModel list, Paging pg)
+        public IActionResult _List(ListMemberViewModel list, Paging pg)
         {
-            return Json(userService.Result(memberService.GetAll(list, ref pg), pg));
+            return Json(new { Values = memberService.GetAll(list, ref pg), Paging = pg });
         }
 
         [HttpPost]
-        public async Task<JsonResult> _Delete(Guid id)
+        public async Task<IActionResult> _Delete(Guid id)
         {
-            return Json(await memberService.Remove(id));
+            await memberService.Remove(id);
+            return Ok();
         }
 
         [HttpPost]
-        public JsonResult _Permission(Guid id, bool isDenied)
+        public IActionResult _Permission(Guid id, bool isDenied)
         {
-            return Json(userService.Result(memberService.Permission(id, isDenied)));
+            return Json(new { Values = memberService.Permission(id, isDenied) });
         }
 
         [HttpPost]

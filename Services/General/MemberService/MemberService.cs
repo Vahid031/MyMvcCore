@@ -17,12 +17,9 @@ namespace Services.General.MemberService
 
     public class MemberService : GenericService<Member>, IMemberService
     {
-        private readonly IUserService userService;
-
-        public MemberService(IUnitOfWork uow, IUserService userService)
+        public MemberService(IUnitOfWork uow)
             : base(uow)
         {
-            this.userService = userService;
         }
 
         public IEnumerable<ListMemberViewModel> GetAll(ListMemberViewModel list, ref Paging pg)
@@ -62,35 +59,17 @@ namespace Services.General.MemberService
             });
         }
 
-        public async Task<Response> Save(CreateMemberViewModel model)
+        public async Task Save(CreateMemberViewModel model)
         {
-            Response result;
+            if (model.Member.Id == null)
+                Update(model.Member);
+            else
+                Insert(model.Member);
 
-            try
-            {
-                if (model.Member.Id == null)
-                {
-                    Update(model.Member);
-
-                    result = userService.Succeed(Alert.SuccessUpdate);
-                }
-                else
-                {
-                    Insert(model.Member);
-                    result = userService.Succeed(Alert.SuccessInsert);
-                }
-
-                await uow.CommitAsync();
-            }
-            catch (Exception)
-            {
-                result = userService.Failed(Alert.ErrorInInsertOrUpdate);
-            }
-
-            return result;
+            await uow.CommitAsync();
         }
 
-        public async Task<Response> Remove(Guid id)
+        public async Task Remove(Guid id)
         {
             //uow.Entry<Permission>(Find(id)).Collection(m => m.RolePermissions).Load();
 
@@ -99,8 +78,6 @@ namespace Services.General.MemberService
                 );
 
             await uow.CommitAsync();
-
-            return userService.Succeed(Alert.SuccessDelete);
         }
     }
 }

@@ -16,8 +16,8 @@ namespace Services.General.RoleService
 
         IEnumerable<Tree> Permission(Guid id);
 
-        Task<Response> Save(CreateRoleViewModel model);
+        Task Save(CreateRoleViewModel model);
 
-        Task<Response> Remove(Guid id);
+        Task Remove(Guid id);
     }
 }

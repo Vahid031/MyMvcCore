@@ -2,8 +2,6 @@
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using ViewModels.General;
-using Services.General.MemberService;
-using Services.General.PermissionService;
 using Microsoft.AspNetCore.Authorization;
 using Services.UserService;
 
@@ -11,19 +9,10 @@ namespace Web.Pages.General.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly ILogger<AccountController> logger;
-        private readonly IMemberService memberService;
-        private readonly IPermissionService permissionService;
         private readonly IUserService userService;
 
-        public AccountController(ILogger<AccountController> logger, 
-                                 IMemberService memberService, 
-                                 IPermissionService permissionService, 
-                                 IUserService userService)
+        public AccountController(IUserService userService)
         {
-            this.logger = logger;
-            this.memberService = memberService;
-            this.permissionService = permissionService;
             this.userService = userService;
         }
 

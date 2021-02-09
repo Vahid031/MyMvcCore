@@ -87,18 +87,19 @@ namespace Web.Pages.General.Controllers
 
         #region Methods
         [HttpPost]
-        public JsonResult _Create(CreatePermissionViewModel model)
+        public IActionResult _Create(CreatePermissionViewModel model)
         {
-            if (ModelState.IsValid)
-                return Json(permissionService.Save(model));
-            else
-                return Json(userService.Failed(Alert.ErrorInInputParameter));
+            if (!ModelState.IsValid)
+                return BadRequest(Alert.ErrorInInputParameter.GetMessage());
+
+            permissionService.Save(model);
+            return Ok();
         }
 
         [HttpPost]
-        public JsonResult _List(ListPermissionViewModel list, Paging pg)
+        public IActionResult _List(ListPermissionViewModel list, Paging pg)
         {
-            return Json(userService.Result(permissionService.GetAll(list, ref pg), pg));
+            return Json(new { Values = permissionService.GetAll(list, ref pg), Paging = pg });
         }
 
         public JsonResult _Tree()

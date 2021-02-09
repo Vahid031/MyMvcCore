@@ -22,16 +22,16 @@ namespace Services.UserService
 
         Task<IEnumerable<Permission>> GetByMemberId();
 
-        Response<TEntity> Result<TEntity>(TEntity data, Paging pg = null, string message = "", AlertType type = AlertType.success);
+        //Response<TEntity> Result<TEntity>(TEntity data, Paging pg = null, string message = "", AlertType type = AlertType.success);
 
-        //Response<TEntity> Result<TEntity>(TEntity data, Paging pg = null, Alert? alert = null, AlertType type = AlertType.success);
+        ////Response<TEntity> Result<TEntity>(TEntity data, Paging pg = null, Alert? alert = null, AlertType type = AlertType.success);
 
-        Response Succeed(string message, AlertType type = AlertType.success);
+        //Response Succeed(string message, AlertType type = AlertType.success);
 
-        Response Succeed(Alert? alert = null, AlertType type = AlertType.success);
+        //Response Succeed(Alert? alert = null, AlertType type = AlertType.success);
 
-        Response Failed(string message, AlertType type = AlertType.danger);
+        //Response Failed(string message, AlertType type = AlertType.danger);
 
-        Response Failed(Alert? alert = null, AlertType type = AlertType.danger);
+        //Response Failed(Alert? alert = null, AlertType type = AlertType.danger);
     }
 }

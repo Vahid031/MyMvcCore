@@ -9,11 +9,9 @@ using DatabaseContext;
 using DomainModels.General;
 using ViewModels.General;
 using Infrastructure.Entities;
-using Infrastructure.Enums;
 using System;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
 
 namespace Services.UserService
 {
@@ -94,12 +92,12 @@ namespace Services.UserService
 
         public async Task<IEnumerable<Permission>> GetByMemberId()
         {
-            var all = uow.Set<RolePermission>()
-                     .Join(uow.Set<RoleMember>(), x => x.RoleId, y => y.RoleId, (x, y) => new { x.PermissionId, y.MemberId });
+            var all = uow.Get<RolePermission>()
+                     .Join(uow.Get<RoleMember>(), x => x.RoleId, y => y.RoleId, (x, y) => new { x.PermissionId, y.MemberId });
 
-            var denied = uow.Set<MemberPermission>().Where(m => m.IsDenied ?? false).Select(m => new { m.PermissionId, m.MemberId });
+            var denied = uow.Get<MemberPermission>(m => m.IsDenied ?? false).Select(m => new { m.PermissionId, m.MemberId });
 
-            var access = uow.Set<MemberPermission>().Where(m => !(m.IsDenied ?? false)).Select(m => new { m.PermissionId, m.MemberId });
+            var access = uow.Get<MemberPermission>(m => !(m.IsDenied ?? false)).Select(m => new { m.PermissionId, m.MemberId });
 
 
             var query = all.Union(access).Except(denied).Where(m => m.MemberId == MemberId)
@@ -108,6 +106,7 @@ namespace Services.UserService
                      .OrderBy(m => m.Order);
 
             var permissions = await memoryCache.GetOrCreateAsync("Permissions", async x => await (query).ToListAsync());
+
 
             return permissions.AsEnumerable().Select(Result => new Permission()
             {
@@ -123,70 +122,70 @@ namespace Services.UserService
             });
         }
 
-        public Response<TEntity> Result<TEntity>(TEntity data, Paging pg = null, string message = "", AlertType type = AlertType.success)
-        {
-            return new Response<TEntity>()
-            {
-                Success = true,
-                Message = message,
-                Type = type.ToString(),
-                Data = data,
-                Paging = pg
-            };
-        }
+        //public Response<TEntity> Result<TEntity>(TEntity data, Paging pg = null, string message = "", AlertType type = AlertType.success)
+        //{
+        //    return new Response<TEntity>()
+        //    {
+        //        Success = true,
+        //        Message = message,
+        //        Type = type.ToString(),
+        //        Data = data,
+        //        Paging = pg
+        //    };
+        //}
 
-        public Response<TEntity> Result<TEntity>(TEntity data, Paging pg = null, Alert? alert = null, AlertType type = AlertType.success)
-        {
-            return new Response<TEntity>()
-            {
-                Success = true,
-                Message = alert?.GetMessage(),
-                Type = type.ToString(),
-                Data = data,
-                Paging = pg
-            };
-        }
+        //public Response<TEntity> Result<TEntity>(TEntity data, Paging pg = null, Alert? alert = null, AlertType type = AlertType.success)
+        //{
+        //    return new Response<TEntity>()
+        //    {
+        //        Success = true,
+        //        Message = alert?.GetMessage(),
+        //        Type = type.ToString(),
+        //        Data = data,
+        //        Paging = pg
+        //    };
+        //}
 
-        public Response Succeed(string message, AlertType type = AlertType.success)
-        {
-            return new Response()
-            {
-                Success = true,
-                Message = message,
-                Type = type.ToString()
-            };
-        }
+        //public Response Succeed(string message, AlertType type = AlertType.success)
+        //{
+        //    return new Response()
+        //    {
+        //        Success = true,
+        //        Message = message,
+        //        Type = type.ToString()
+        //    };
+        //}
 
-        public Response Succeed(Alert? alert = null, AlertType type = AlertType.success)
-        {
-            return new Response()
-            {
-                Success = true,
-                Message = alert?.GetMessage(),
-                Type = type.ToString()
-            };
-        }
+        //public Response Succeed(Alert? alert = null, AlertType type = AlertType.success)
+        //{
+        //    return new Response()
+        //    {
+        //        Success = true,
+        //        Message = alert?.GetMessage(),
+        //        Type = type.ToString()
+        //    };
+        //}
 
-        public Response Failed(string message, AlertType type = AlertType.danger)
-        {
-            return new Response()
-            {
-                Success = false,
-                Message = message,
-                Type = type.ToString(),
-                Errors = new List<string>() { message }
-            };
-        }
+        //public Response Failed(string message, AlertType type = AlertType.danger)
+        //{
+        //    return new Response()
+        //    {
+        //        Success = false,
+        //        Message = message,
+        //        Type = type.ToString(),
+        //        Errors = new List<string>() { message }
+        //    };
+        //}
 
-        public Response Failed(Alert? alert = null, AlertType type = AlertType.danger)
-        {
-            return new Response()
-            {
-                Success = false,
-                Message = alert?.GetMessage(),
-                Type = type.ToString(),
-                Errors = new List<string>() { alert?.GetMessage() }
-            };
-        }
+        //public Response Failed(Alert? alert = null, AlertType type = AlertType.danger)
+        //{
+        //    return new Response()
+        //    {
+        //        Success = false,
+        //        Message = alert?.GetMessage(),
+        //        Type = type.ToString(),
+        //        Errors = new List<string>() { alert?.GetMessage() }
+        //    };
+        //}
     }
 }

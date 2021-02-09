@@ -8,6 +8,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Areas\General\Business\logo.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Areas\General\Business\logo.jpg">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="bootstrap" Version="4.4.1" />
     <PackageReference Include="bootstrap-select" Version="1.13.12" />
     <PackageReference Include="bootstrap-toggle" Version="2.2.2" />
@@ -55,7 +66,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="Pages\General\Views\Role\Index.cshtml">
+    <Content Update="Areas\General\Views\Role\Index.cshtml">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
