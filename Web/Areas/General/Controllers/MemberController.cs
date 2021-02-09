@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Services.General.MemberService;
-using Services.UserService;
 using System;
 using System.Collections.Generic;
 using System.IO;

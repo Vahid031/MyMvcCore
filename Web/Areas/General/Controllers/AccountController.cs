@@ -27,12 +27,6 @@ namespace Web.Pages.General.Controllers
             return View();
         }
 
-        [HttpGet]
-        public IActionResult Login()
-        {
-            return PartialView(new LoginViewModel());
-        }
-
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel loginViewModel)
         {
