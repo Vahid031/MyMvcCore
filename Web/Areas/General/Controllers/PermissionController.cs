@@ -96,13 +96,13 @@ namespace Web.Pages.General.Controllers
             return Ok();
         }
 
-        [HttpPut("Id?")]
-        public IActionResult _Update(Guid id, CreatePermissionViewModel model)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> _Update(Guid id, CreatePermissionViewModel model)
         {
             if (!ModelState.IsValid)
                 return BadRequest(Alert.ErrorInInputParameter.GetMessage());
 
-            permissionService.UpdateAsync(id, model);
+            await permissionService.UpdateAsync(id, model);
             return Ok();
         }
 
