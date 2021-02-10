@@ -20,8 +20,10 @@ namespace Services.General.PermissionService
 
         Task SetMemberPermission(Guid memberId, Guid[] permissionId, bool isDenied);
 
-        Task Save(CreatePermissionViewModel model);
+        Task InsertAsync(CreatePermissionViewModel model);
 
-        Task Remove(Guid Id);
+        Task UpdateAsync(Guid id, CreatePermissionViewModel model);
+
+        Task DeleteAsync(Guid Id);
     }
 }

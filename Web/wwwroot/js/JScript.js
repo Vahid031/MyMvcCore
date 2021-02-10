@@ -105,7 +105,6 @@ function Popup(title, type, url, data, callBack, popupSize, popupContainer) {
 }
 
 function CreateMenu() {
-    debugger
 
     $(".sidebar nav ul").remove();
     var ul_sidebar = FillMenu(permissions, null, 'sidebar');

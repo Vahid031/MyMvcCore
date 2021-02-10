@@ -8,7 +8,6 @@ using Infrastructure.Entities;
 using Services.GenericService;
 using Services.UserService;
 using Infrastructure.Common;
-using Infrastructure.Enums;
 using System.Threading.Tasks;
 
 namespace Services.General.PermissionService
@@ -53,7 +52,7 @@ namespace Services.General.PermissionService
 
         public IEnumerable<Tree> Tree()
         {
-            var query = Get().OrderBy(m => m.Order);
+            var query = uow.Get<Permission>().OrderBy(m => m.Order);
 
             return query.AsEnumerable().Select(Result => new Tree()
             {
@@ -71,7 +70,7 @@ namespace Services.General.PermissionService
         {
             var permission = Find(id);
 
-            var siblings = Get().Where(m => m.ParentId.Equals(parentId)).OrderBy(m => m.Order).ToList();
+            var siblings = uow.Get<Permission>(m => m.ParentId.Equals(parentId)).OrderBy(m => m.Order).ToList();
 
             int i;
             for (i = 0; i < siblings.Count(); i++)
@@ -126,17 +125,34 @@ namespace Services.General.PermissionService
             await uow.CommitAsync(userService.MemberId);
         }
 
-        public async Task Save(CreatePermissionViewModel model)
+        public async Task InsertAsync(CreatePermissionViewModel model)
         {
-            if (model.Permission.Id == null)
-                Update(model.Permission);
-            else
-                Insert(model.Permission);
+            model.Permission.Id = Guid.NewGuid();
+            model.Permission.CreateDate = new DateTime();
 
+            Insert(model.Permission);
             await uow.CommitAsync();
         }
 
-        public async Task Remove(Guid id)
+        public async Task UpdateAsync(Guid id, CreatePermissionViewModel model)
+        {
+            var permission = Find(id);
+
+            if (permission == null)
+                return;
+
+            permission.Action = model.Permission.Action;
+            permission.Controller = model.Permission.Controller;
+            permission.Active = model.Permission.Active;
+            permission.Visible = model.Permission.Visible;
+            permission.Title = model.Permission.Title;
+            permission.Icon = model.Permission.Icon;
+
+            Update(permission);
+            await uow.CommitAsync();
+        }
+
+        public async Task DeleteAsync(Guid id)
         {
             //uow.Entry<Permission>(Find(id)).Collection(m => m.RolePermissions).Load();
             Delete(id);

@@ -23,7 +23,7 @@ namespace Services.General.RoleService
 
         public IEnumerable<ListRoleViewModel> GetAll(ListRoleViewModel list, ref Paging pg)
         {
-            return Get().Paging(list, ref pg).AsEnumerable().Select(Result => new ListRoleViewModel()
+            return uow.Get<Role>().Paging(list, ref pg).AsEnumerable().Select(Result => new ListRoleViewModel()
             {
                 Role = Result
             });
@@ -31,7 +31,7 @@ namespace Services.General.RoleService
 
         public IEnumerable<Tree> Tree()
         {
-            return Get().AsEnumerable().Select(Result => new Tree()
+            return uow.Get<Role>().AsEnumerable().Select(Result => new Tree()
             {
                 id = Result.Id.Value,
                 parentId = Result.ParentId,

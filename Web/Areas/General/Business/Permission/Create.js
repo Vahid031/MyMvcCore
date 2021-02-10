@@ -5,7 +5,7 @@
     var id = $container.find('#Permission_Id').val();
 
 
-    if (id != '' && id > 0) {
+    if (id !== undefined && id.length > 0) {
 
         $container.find('.btn-delete').on('click', function () {
 

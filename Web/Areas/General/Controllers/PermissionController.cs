@@ -92,7 +92,17 @@ namespace Web.Pages.General.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(Alert.ErrorInInputParameter.GetMessage());
 
-            permissionService.Save(model);
+            permissionService.InsertAsync(model);
+            return Ok();
+        }
+
+        [HttpPut("Id?")]
+        public IActionResult _Update(Guid id, CreatePermissionViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(Alert.ErrorInInputParameter.GetMessage());
+
+            permissionService.UpdateAsync(id, model);
             return Ok();
         }
 
@@ -102,38 +112,42 @@ namespace Web.Pages.General.Controllers
             return Json(new { Values = permissionService.GetAll(list, ref pg), Paging = pg });
         }
 
-        public JsonResult _Tree()
+        public IActionResult _Tree()
         {
             return Json(permissionService.Tree());
         }
 
-        public async Task<JsonResult> _Menu()
+        public async Task<IActionResult> _Menu()
         {
             return Json(await userService.GetByMemberId());
         }
 
         [HttpPost]
-        public JsonResult _Delete(Guid id)
+        public async Task<IActionResult> _Delete(Guid id)
         {
-            return Json(permissionService.Remove(id));
+            await permissionService.DeleteAsync(id);
+            return Ok();
         }
 
         [HttpPost]
-        public JsonResult ChangePeriority(Guid id, Guid parentId)
+        public IActionResult ChangePeriority(Guid id, Guid parentId)
         {
-            return Json(permissionService.ChangePeriority(id, parentId));
+            permissionService.ChangePeriority(id, parentId);
+            return Ok();
         }
 
         [HttpPost]
-        public JsonResult SetRolePermission(Guid roleId, Guid[] permissionId)
+        public IActionResult SetRolePermission(Guid roleId, Guid[] permissionId)
         {
-            return Json(permissionService.SetRolePermission(roleId, permissionId));
+            permissionService.SetRolePermission(roleId, permissionId);
+            return Ok();
         }
 
         [HttpPost]
-        public JsonResult SetMemberPermission(Guid memberId, Guid[] permissionId, bool isDenied)
+        public IActionResult SetMemberPermission(Guid memberId, Guid[] permissionId, bool isDenied)
         {
-            return Json(permissionService.SetMemberPermission(memberId, permissionId, isDenied));
+            permissionService.SetMemberPermission(memberId, permissionId, isDenied);
+            return Ok();
         }
 
         #endregion

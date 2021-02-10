@@ -16,7 +16,7 @@ function Tree_MemberPermission(memberId) {
 
     isDenied = Boolean(isDenied == 'true');
 
-    if (!(memberId > 0))
+    if (memberId === undefined | memberId == '')
         return;
 
     AJAX({

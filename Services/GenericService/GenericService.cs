@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Linq.Expressions;
 using DatabaseContext;
-using Infrastructure.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Services.GenericService
@@ -18,7 +17,7 @@ namespace Services.GenericService
 
         public IQueryable<T> Get(Expression<Func<T, bool>> filter = null)
         {
-            return uow.Get<T>(filter);
+            return uow.Get(filter);
         }
 
         public T Find(object Id)

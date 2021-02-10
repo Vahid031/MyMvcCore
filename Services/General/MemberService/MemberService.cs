@@ -34,7 +34,7 @@ namespace Services.General.MemberService
 
         public CreateMemberViewModel Get(Guid Id)
         {
-            var a = Get(m => m.Id.Equals(Id)).Include(m => m.Person);
+            var a = uow.Get<Member>(m => m.Id.Equals(Id)).Include(m => m.Person);
 
             return a.AsEnumerable().Select(Result => new CreateMemberViewModel() { Member = Result }).FirstOrDefault();
         }
