@@ -26,6 +26,8 @@ namespace Web.Pages.General.Controllers
             this.memberService = memberService;
         }
 
+        #region Views
+
         [HttpGet]
         public IActionResult Index()
         {
@@ -35,7 +37,17 @@ namespace Web.Pages.General.Controllers
         [HttpGet]
         public IActionResult _Create()
         {
-            return PartialView();
+            return PartialView(new CreateMemberViewModel());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> _Create(CreateMemberViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(Alert.ErrorInInputParameter.GetMessage());
+
+            await memberService.InsertAsync(model);
+            return Ok();
         }
 
         [HttpPost]
@@ -44,15 +56,19 @@ namespace Web.Pages.General.Controllers
             return PartialView(nameof(_Create), memberService.Get(id));
         }
 
-        [HttpPost]
-        public IActionResult _Create(CreateMemberViewModel model)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> _Update(Guid id, CreateMemberViewModel model)
         {
             if (!ModelState.IsValid)
                 return BadRequest(Alert.ErrorInInputParameter.GetMessage());
 
-            memberService.Save(model);
+            await memberService.UpdateAsync(id, model);
             return Ok();
         }
+
+        #endregion
+
+        #region Methods
 
         [HttpPost]
         public IActionResult _List(ListMemberViewModel list, Paging pg)
@@ -63,7 +79,7 @@ namespace Web.Pages.General.Controllers
         [HttpPost]
         public async Task<IActionResult> _Delete(Guid id)
         {
-            await memberService.Remove(id);
+            await memberService.DeleteAsync(id);
             return Ok();
         }
 
@@ -72,64 +88,65 @@ namespace Web.Pages.General.Controllers
         {
             return Json(new { Values = memberService.Permission(id, isDenied) });
         }
+        #endregion
 
-        [HttpPost]
-        public async Task<IActionResult> _Upload(IFormFile file)
-        {
-            if (file == null || file.Length == 0)
-                return Content("file not selected");
+        //[HttpPost]
+        //public async Task<IActionResult> _Upload(IFormFile file)
+        //{
+        //    if (file == null || file.Length == 0)
+        //        return Content("file not selected");
 
-            var path = Path.Combine(
-                        Directory.GetCurrentDirectory(), "wwwroot",
-                        file.FileName);
+        //    var path = Path.Combine(
+        //                Directory.GetCurrentDirectory(), "wwwroot",
+        //                file.FileName);
 
-            using (var stream = new FileStream(path, FileMode.Create))
-            {
-                await file.CopyToAsync(stream);
-            }
+        //    using (var stream = new FileStream(path, FileMode.Create))
+        //    {
+        //        await file.CopyToAsync(stream);
+        //    }
 
-            return RedirectToAction("Files");
-        }
+        //    return RedirectToAction("Files");
+        //}
 
-        public async Task<IActionResult> Download(string filename)
-        {
-            if (filename == null)
-                return Content("filename not present");
+        //public async Task<IActionResult> Download(string filename)
+        //{
+        //    if (filename == null)
+        //        return Content("filename not present");
 
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", filename);
+        //    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", filename);
 
-            var memory = new MemoryStream();
-            using (var stream = new FileStream(path, FileMode.Open))
-            {
-                await stream.CopyToAsync(memory);
-            }
-            memory.Position = 0;
-            return File(memory, GetContentType(path), Path.GetFileName(path));
-        }
+        //    var memory = new MemoryStream();
+        //    using (var stream = new FileStream(path, FileMode.Open))
+        //    {
+        //        await stream.CopyToAsync(memory);
+        //    }
+        //    memory.Position = 0;
+        //    return File(memory, GetContentType(path), Path.GetFileName(path));
+        //}
 
-        private string GetContentType(string path)
-        {
-            var types = GetMimeTypes();
-            var ext = Path.GetExtension(path).ToLowerInvariant();
-            return types[ext];
-        }
+        //private string GetContentType(string path)
+        //{
+        //    var types = GetMimeTypes();
+        //    var ext = Path.GetExtension(path).ToLowerInvariant();
+        //    return types[ext];
+        //}
 
-        private Dictionary<string, string> GetMimeTypes()
-        {
-            return new Dictionary<string, string>
-            {
-                {".txt", "text/plain"},
-                {".pdf", "application/pdf"},
-                {".doc", "application/vnd.ms-word"},
-                {".docx", "application/vnd.ms-word"},
-                {".xls", "application/vnd.ms-excel"},
-                {".xlsx", "application/vnd.openxmlformatsofficedocument.spreadsheetml.sheet"},
-                {".png", "image/png"},
-                {".jpg", "image/jpeg"},
-                {".jpeg", "image/jpeg"},
-                {".gif", "image/gif"},
-                {".csv", "text/csv"}
-            };
-        }
+        //private Dictionary<string, string> GetMimeTypes()
+        //{
+        //    return new Dictionary<string, string>
+        //    {
+        //        {".txt", "text/plain"},
+        //        {".pdf", "application/pdf"},
+        //        {".doc", "application/vnd.ms-word"},
+        //        {".docx", "application/vnd.ms-word"},
+        //        {".xls", "application/vnd.ms-excel"},
+        //        {".xlsx", "application/vnd.openxmlformatsofficedocument.spreadsheetml.sheet"},
+        //        {".png", "image/png"},
+        //        {".jpg", "image/jpeg"},
+        //        {".jpeg", "image/jpeg"},
+        //        {".gif", "image/gif"},
+        //        {".csv", "text/csv"}
+        //    };
+        //}
     }
 }

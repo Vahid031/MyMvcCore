@@ -4,8 +4,10 @@
 
     if (HasPermission('Member', '_Create')) {
         $('#btnAdd').on('click', function () {
-            Popup('ثبت کاربر جدید', 'Get', '../Member/_Create', [], Load_Member, 'lg');
+            Popup('ثبت کاربر جدید', 'Get', '../Member/_Create', {}, Load_Member, 'lg');            
         });
+
+        $('#btnAdd').parent().ResetForm();
     }
     else {
         $('#btnAdd').remove();

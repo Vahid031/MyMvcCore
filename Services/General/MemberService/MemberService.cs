@@ -34,9 +34,13 @@ namespace Services.General.MemberService
 
         public CreateMemberViewModel Get(Guid Id)
         {
-            var a = uow.Get<Member>(m => m.Id.Equals(Id)).Include(m => m.Person);
+            var query = Get(m => m.Id == Id);
 
-            return a.AsEnumerable().Select(Result => new CreateMemberViewModel() { Member = Result }).FirstOrDefault();
+            return query.AsEnumerable().Select(Result => new CreateMemberViewModel()
+            { 
+                Member = Result, 
+                Person = Result.Person 
+            }).FirstOrDefault();
         }
 
         public IEnumerable<Tree> Permission(Guid id, bool isDenied)
@@ -59,17 +63,21 @@ namespace Services.General.MemberService
             });
         }
 
-        public async Task Save(CreateMemberViewModel model)
+        public async Task InsertAsync(CreateMemberViewModel model)
         {
-            if (model.Member.Id == null)
-                Update(model.Member);
-            else
-                Insert(model.Member);
 
+            Insert(model.Member);
             await uow.CommitAsync();
         }
 
-        public async Task Remove(Guid id)
+        public async Task UpdateAsync(Guid id, CreateMemberViewModel model)
+        {
+
+            Update(model.Member);
+            await uow.CommitAsync();
+        }
+
+        public async Task DeleteAsync(Guid id)
         {
             //uow.Entry<Permission>(Find(id)).Collection(m => m.RolePermissions).Load();
 

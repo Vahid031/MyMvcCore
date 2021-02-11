@@ -67,28 +67,28 @@ namespace Infrastructure.Common
                     }
                     else
                     {
-                        item.DynamicFiltering(ref pg);
+                        //item.DynamicFiltering(ref pg);
 
-                        //foreach (PropertyInfo childItem in item.PropertyType.GetProperties())
-                        //{
-                        //    object childItemValue = childItem.GetValue(itemValue, null);
+                        foreach (PropertyInfo childItem in item.PropertyType.GetProperties())
+                        {
+                            object childItemValue = childItem.GetValue(itemValue, null);
 
-                        //    if (childItemValue != null && childItemValue.ToString() != "")
-                        //    {
-                        //        if (childItem.PropertyType.Name.ToUpper() == "STRING")
-                        //            expression = "{0}.Contains(@{1})";
-                        //        else
-                        //            expression = "{0} = @{1}";
+                            if (childItemValue != null && childItemValue.ToString() != "")
+                            {
+                                if (childItem.PropertyType.Name.ToUpper() == "STRING")
+                                    expression = "{0}.Contains(@{1})";
+                                else
+                                    expression = "{0} = @{1}";
 
-                        //        if (pg.filter != "")
-                        //            pg.filter += " And ";
+                                if (pg.filter != "")
+                                    pg.filter += " And ";
 
-                        //        pg.filter += string.Format(expression, item.Name + "." + childItem.Name, pg.values.Count());
-                        //        pg.values.Add(childItemValue);
+                                pg.filter += string.Format(expression, item.Name + "." + childItem.Name, pg.values.Count());
+                                pg.values.Add(childItemValue);
 
-                        //        pg.searchItems.Add(item.Name + "." + childItem.Name, childItemValue);
-                        //    }
-                        //}
+                                pg.searchItems.Add(item.Name + "." + childItem.Name, childItemValue);
+                            }
+                        }
                     }
                 }
             }

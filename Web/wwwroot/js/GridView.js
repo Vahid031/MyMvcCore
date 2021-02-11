@@ -158,7 +158,7 @@ $.fn.GridView = function (options) {
         var param = $(this).attr('name');
         var value = $(this).val();
 
-        if (value.length > 0)
+        if (value !== undefined && value.length > 0)
             params[param] = value;
         else if (params[param])
             $(this).val(params[param]);
@@ -209,7 +209,7 @@ $.fn.GridView = function (options) {
 
                 $(tbody).children("tr:not(:first-child)").remove();
 
-                BindData(data.Data);
+                BindData(data.Values);
 
                 $(table).Paging(data.Paging, columns);
             },

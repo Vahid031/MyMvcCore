@@ -16,8 +16,10 @@ namespace Services.General.MemberService
 
         IEnumerable<Tree> Permission(Guid id, bool isDenied);
 
-        Task Save(CreateMemberViewModel model);
+        Task InsertAsync(CreateMemberViewModel model);
 
-        Task Remove(Guid id);
+        Task UpdateAsync(Guid id, CreateMemberViewModel model);
+
+        Task DeleteAsync(Guid id);
     }
 }
