@@ -12,7 +12,7 @@
     else {
         $('#btnAdd').remove();
     }
-
+  
 });
 
 
@@ -20,7 +20,7 @@ function Load_Member() {
 
     var ddlGender = $('<select></select>');
     ddlGender.addClass('form-control selectpicker');
-    ddlGender.css('width', '50px');
+    ddlGender.css('min-width', '50px');
     ddlGender.append(`<option>همه</option>`);
     ddlGender.append(`<option value="true">آقا</option>`);
     ddlGender.append(`<option value="false">خانم</option>`);
@@ -150,5 +150,5 @@ function Delete_Member(id) {
 
 function Update_Member(id) {
 
-    Popup('ویرایش کاربر', 'Post', '../Member/_Update', { id: id }, undefined, 'lg');
+    Popup('ویرایش کاربر', 'Post', '../Member/_Update', { id: id }, Load_Member, 'lg');
 }

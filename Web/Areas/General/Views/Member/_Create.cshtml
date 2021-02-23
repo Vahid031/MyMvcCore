@@ -2,7 +2,6 @@
 
 
 <form id="frm-Member" class="operationform" autocomplete="off">
-    <input type="hidden" asp-for="Member.Id" />
     <div class="row">
         <div class="form-group col-xl-2 col-lg-3 col-md-4 col-sm-6">
             <label asp-for="Person.FirstName"></label>
@@ -64,6 +63,7 @@
                 }
                 else
                 {
+                    <input type="hidden" asp-for="Member.Id" />
                     <button type="submit" class="btn-edit" />
                 }
             }
@@ -72,5 +72,6 @@
     </div>
 </form>
 
-
-<script src="/General/Business/Member/Create.js"></script>
+<script>
+    $.getScript("/General/Business/Member/Create.js");
+</script>

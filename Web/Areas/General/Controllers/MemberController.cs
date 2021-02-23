@@ -45,9 +45,9 @@ namespace Web.Pages.General.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(Alert.ErrorInInputParameter.GetMessage());
-
-            await memberService.InsertAsync(model);
-            return Ok();
+            if (model.Member.Id != null)
+                await memberService.InsertAsync(model);
+            return Ok(Alert.SuccessInsert.GetMessage());
         }
 
         [HttpPost]

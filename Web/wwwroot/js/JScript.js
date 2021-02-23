@@ -49,10 +49,28 @@ function AJAX(params) {
         processData: params.processData != undefined ? params.processData : true,
         beforeSend: params.beforeSend != undefined ? params.beforeSend : function () { },//$('#loading').fadeIn(); },
         complete: params.complete != undefined ? params.complete : function () { },//$('#loading').fadeOut(); },
-        success: params.success != undefined ? params.success : function (data) { console.log(data) },
+        success: params.success != undefined ? params.success : function (data, status, xhr) {
+            console.log('Successsssssssssss : ');
+            console.log('data : ');
+            console.log(data);
+            console.log('status : ');
+            console.log(status);
+            console.log('xhr : ');
+            console.log(xhr);
+        },
         contentType: params.contentType == undefined ? "application/x-www-form-urlencoded; charset=utf-8" : params.contentType,
         failure: function () { alert('failure'); },
         error: function (xhr, Result, ajaxOptions, thrownError) {
+
+            console.log('Errrrooooooooooorr : ');
+            console.log('xhr : ');
+            console.log(xhr.responseText);
+            console.log('Result : ');
+            console.log(Result );
+            console.log('ajaxOptions : ');
+            console.log(ajaxOptions );
+            console.log('thrownError : ');
+            console.log(thrownError );
 
             switch (xhr.status) {
                 case 401:
@@ -295,67 +313,11 @@ $.fn.ResetForm = function () {
     });
 
     $container.find('select.selectpicker').each(function () {
-        //if ($(this).val() != null)
-            //$(this).val(null);
+        $(this).val(null);
         $(this).selectpicker('refresh');
     });
 
-    $container.find('input[type="password"]').each(function () {
-
-        var element = $(this);
-        var a = document.createElement('a');
-        a.setAttribute('class', 'Password');
-        a.innerHTML = '<i class="fa fa-eye-slash" />';
-        element.after(a);
-
-        $(a).on('click', function () {
-            if (element.attr('type') === 'password') {
-                element.attr('type', 'text');
-                $(this).html('<i class="fa fa-eye" />');
-            }
-            else {
-                element.attr('type', 'password');
-                $(this).html('<i class="fa fa-eye-slash" />');
-            }
-        });
-    });
-
-
-    $container.find('.btn-delete').each(function () {
-
-        $(this).html('<i class="fa fa-trash"></i> حذف');
-        if (!$(this).hasClass('btn btn-danger'))
-            $(this).addClass('btn btn-danger');
-    });
-
-    $container.find('.btn-cancel').each(function () {
-
-        $(this).html('<i class="fa fa-spinner"></i> صرفنظر');
-        if (!$(this).hasClass('btn btn-secondary'))
-            $(this).addClass('btn btn-secondary');
-    });
-
-    $container.find('.btn-edit').each(function () {
-
-        $(this).html('<i class="fa fa-plus"></i> ویرایش');
-        if (!$(this).hasClass('btn btn-primary'))
-            $(this).addClass('btn btn-primary');
-    });
-
-    $container.find('.btn-add').each(function () {
-
-        $(this).html('<i class="fa fa-edit"></i> ثبت');
-        if (!$(this).hasClass('btn btn-success'))
-            $(this).addClass('btn btn-success');
-
-    });
-
-    $container.find('.btn-new').each(function () {
-
-        $(this).html('<i class="fa fa-plus"></i> جدید');
-        if (!$(this).hasClass('btn btn-success'))
-            $(this).addClass('btn btn-success');
-    });
+    PrepareButtons($container);
 }
 
 $.fn.PartialViewHandler = function () {
@@ -375,7 +337,27 @@ $.fn.PartialViewHandler = function () {
         $(this).selectpicker();
     });
 
-    $(this).ResetForm();
+    $(this).find('input[type="password"]').each(function () {
+
+        var element = $(this);
+        var a = document.createElement('a');
+        a.setAttribute('class', 'Password');
+        a.innerHTML = '<i class="fa fa-eye-slash" />';
+        element.after(a);
+
+        $(a).on('click', function () {
+            if (element.attr('type') === 'password') {
+                element.attr('type', 'text');
+                $(this).html('<i class="fa fa-eye" />');
+            }
+            else {
+                element.attr('type', 'password');
+                $(this).html('<i class="fa fa-eye-slash" />');
+            }
+        });
+    });
+
+    PrepareButtons($(this));
 }
 
 $.fn.HandleValidation = function () {
@@ -414,5 +396,44 @@ $.fn.HandleValidation = function () {
             $(this).val(str.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
         }
 
+    });
+}
+
+function PrepareButtons($container) {
+
+    $container.find('.btn-delete').each(function () {
+
+        $(this).html('<i class="fa fa-trash"></i> حذف');
+        if (!$(this).hasClass('btn btn-danger'))
+            $(this).addClass('btn btn-danger');
+    });
+
+    $container.find('.btn-cancel').each(function () {
+
+        $(this).html('<i class="fa fa-spinner"></i> صرفنظر');
+        if (!$(this).hasClass('btn btn-secondary'))
+            $(this).addClass('btn btn-secondary');
+    });
+
+    $container.find('.btn-edit').each(function () {
+
+        $(this).html('<i class="fa fa-edit"></i> ویرایش');
+        if (!$(this).hasClass('btn btn-primary'))
+            $(this).addClass('btn btn-primary');
+    });
+
+    $container.find('.btn-add').each(function () {
+
+        $(this).html('<i class="fa fa-plus"></i> ثبت');
+        if (!$(this).hasClass('btn btn-success'))
+            $(this).addClass('btn btn-success');
+
+    });
+
+    $container.find('.btn-new').each(function () {
+
+        $(this).html('<i class="fa fa-plus"></i> جدید');
+        if (!$(this).hasClass('btn btn-success'))
+            $(this).addClass('btn btn-success');
     });
 }
