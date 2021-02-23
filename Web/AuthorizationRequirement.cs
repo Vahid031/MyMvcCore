@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Routing;
-using Services.UserService;
+using Services;
 using System.Threading.Tasks;
 
 namespace Web

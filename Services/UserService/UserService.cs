@@ -55,7 +55,7 @@ namespace Services
 
         public async Task<bool> LoginAsync(LoginViewModel loginViewModel)
         {
-            var member = repository.Get<Member>(m => m.UserName.Equals(loginViewModel.UserName.ToLower())).FirstOrDefault();
+            var member = repository.Get<Member>(m => m.UserName.ToLower().Equals(loginViewModel.UserName.ToLower())).FirstOrDefault();
 
             if (member == null)
                 return false;
@@ -63,15 +63,7 @@ namespace Services
             if (!member.Password.Equals(Hashing.MultiEncrypt(loginViewModel.Password)))
                 return false;
 
-            var roles = repository.Get<RoleMember>(m => m.MemberId == member.Id).Include(m => m.Role);
-
-            var user = new User()
-            {
-                UserName = loginViewModel.UserName,
-                PasswordHash = Hashing.MultiEncrypt(loginViewModel.Password),
-                Id = member.Id.ToString()
-
-            };
+            var roles = repository.Get<RoleMember>(m => m.MemberId == member.Id).Include(m => m.Role).ToList();
 
             var claims = new List<Claim>
                 {
@@ -82,13 +74,6 @@ namespace Services
             {
                 claims.Add(new Claim(ClaimTypes.Role, role.Role.Title));
             });
-
-
-            //foreach (var permission in await GetUserPermission())
-            //{
-            //    claims.Add(new Claim("permission", permission.Controller.ToLower() + "/" + permission.Action.ToLower()));
-            //}
-            //Task.WaitAll();
 
             await context.SignInAsync(new ClaimsPrincipal(new ClaimsIdentity(claims, "Cookies", ClaimTypes.Name, ClaimTypes.Role)));
 

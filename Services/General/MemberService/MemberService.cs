@@ -1,22 +1,25 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
 using DomainModels.General;
-using DatabaseContext;
 using ViewModels.General.MemberViewModel;
 using Infrastructure.Entities;
 using Infrastructure.Common;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using System;
+using DatabaseContext;
 
 namespace Services.General.MemberService
 {
 
-    public class MemberService : Repository, IMemberService
+    public class MemberService : Repository<Member>, IMemberService
     {
-        public MemberService(IUnitOfWork uow)
-        : base(uow)
+        private readonly IRepository<Person> personRepository;
+
+        public MemberService(IRepository<Person> personRepository)
+        :base(uow)
         {
+            this.personRepository = personRepository;
         }
 
         public IEnumerable<ListMemberViewModel> GetAll(ListMemberViewModel list, ref Paging pg)

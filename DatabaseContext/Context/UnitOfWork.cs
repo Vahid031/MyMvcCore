@@ -35,6 +35,7 @@ namespace DatabaseContext.Context
 
             modelBuilder.Seed();
         }
+
         public new DbSet<T> Set<T>() where T : class
         {
             return base.Set<T>();

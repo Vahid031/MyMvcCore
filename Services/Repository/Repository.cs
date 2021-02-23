@@ -4,22 +4,23 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using DatabaseContext;
+using DatabaseContext.Context;
 using Microsoft.EntityFrameworkCore;
 
 namespace Services
 {
-    public class Repository : IRepository
+    public class Repository<T> : IRepository<T> where T : class
     {
-        public readonly IUnitOfWork uow;
+        protected readonly UnitOfWork context;
 
-        public Repository(IUnitOfWork uow)
+        public Repository(UnitOfWork context)
         {
-            this.uow = uow;
+            this.context = context;
         }
 
-        public IQueryable<T> Get<T>(Expression<Func<T, bool>> filter = null) where T : class
+        public IQueryable<T> Get(Expression<Func<T, bool>> filter)
         {
-            IQueryable<T> query = uow.Set<T>().AsNoTracking();
+            IQueryable<T> query = context.Set<T>().AsNoTracking();
 
             if (filter != null)
                 query = query.Where(filter);
@@ -27,32 +28,32 @@ namespace Services
             return query;
         }
 
-        public T Find<T>(object Id) where T : class
+        public T Find(object Id)
         {
-            return uow.Set<T>().Find(Id);
+            return context.Set<T>().Find(Id);
         }
 
-        public void Insert<T>(T entity) where T : class
+        public void Insert(T entity)
         {
-            uow.Set<T>().Add(entity);
+            context.Set<T>().Add(entity);
         }
 
-        public void Insert<T>(IEnumerable<T> entities) where T : class
+        public void Insert(IEnumerable<T> entities)
         {
-            uow.Set<T>().AddRange(entities);
+            context.Set<T>().AddRange(entities);
         }
 
-        public void Update<T>(T entity) where T : class
+        public void Update(T entity)
         {
-            if (uow.Entry(entity).State == EntityState.Detached)
+            if (context.Entry(entity).State == EntityState.Detached)
             {
-                uow.Set<T>().Attach(entity);
+                context.Set<T>().Attach(entity);
             }
 
-            uow.Entry(entity).State = EntityState.Modified;
+            context.Entry(entity).State = EntityState.Modified;
         }
 
-        public void Update<T>(IEnumerable<T> entities) where T : class
+        public void Update(IEnumerable<T> entities)
         {
             Parallel.ForEach(entities, entity =>
             {
@@ -60,28 +61,39 @@ namespace Services
             });
         }
 
-        public void Delete<T>(object id) where T : class
+        public void Delete(object id)
         {
-            T entity = Find<T>(id);
+            T entity = context.Set<T>().Find(id);
 
             if (entity != null)
                 Delete(entity);
         }
 
-        public void Delete<T>(T entity) where T : class
+        public void Delete(T entity)
         {
-            if (uow.Entry(entity).State == EntityState.Detached)
+            if (context.Entry(entity).State == EntityState.Detached)
             {
-                uow.Set<T>().Attach(entity);
+                context.Set<T>().Attach(entity);
             }
-            uow.Set<T>().Remove(entity);
+            context.Set<T>().Remove(entity);
         }
 
-        public void Delete<T>(IEnumerable<T> entities) where T : class
+        public void Delete(IEnumerable<T> entities)
         {
-            Parallel.ForEach(entities, entity => {
+            Parallel.ForEach(entities, entity =>
+            {
                 Delete(entity);
-            });           
+            });
+        }
+
+        void IRepository<T>.SaveChanges(Guid? memberId)
+        {
+            context.Commit(memberId);
+        }
+
+        async Task IRepository<T>.SaveChangesAsync(Guid? memberId)
+        {
+            await context.CommitAsync(memberId);
         }
     }
 }
