@@ -1,16 +1,13 @@
-﻿using DatabaseContext.Context;
+﻿using System;
+using System.Threading.Tasks;
+using DatabaseContext.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
 
 namespace DatabaseContext
 {
     public interface IUnitOfWork
     {
-
         DbSet<T> Set<T>() where T : class;
 
         void Commit(Guid? memberId = null);
@@ -20,8 +17,5 @@ namespace DatabaseContext
         EntityEntry<T> Entry<T>(T Entity) where T : class;
 
         UnitOfWork Context { get; }
-
-        IQueryable<T> Get<T>(Expression<Func<T, bool>> filter = null) where T : class;
-
     }
 }

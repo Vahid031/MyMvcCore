@@ -5,7 +5,6 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using System.Collections.Generic;
-using DatabaseContext;
 using DomainModels.General;
 using ViewModels.General;
 using Infrastructure.Entities;
@@ -13,18 +12,18 @@ using System;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.EntityFrameworkCore;
 
-namespace Services.UserService
+namespace Services
 {
     public class UserService : IUserService
     {
         private readonly HttpContext context;
-        private readonly IUnitOfWork uow;
+        private readonly IRepository repository;
         private readonly IMemoryCache memoryCache;
 
-        public UserService(IHttpContextAccessor context, IUnitOfWork uow, IMemoryCache memoryCache)
+        public UserService(IHttpContextAccessor context, IRepository repository, IMemoryCache memoryCache)
         {
             this.context = context.HttpContext;
-            this.uow = uow;
+            this.repository = repository;
             this.memoryCache = memoryCache;
         }
         public Guid MemberId
@@ -56,13 +55,15 @@ namespace Services.UserService
 
         public async Task<bool> LoginAsync(LoginViewModel loginViewModel)
         {
-            var member = uow.Get<Member>(m => m.UserName.Equals(loginViewModel.UserName.ToLower())).FirstOrDefault();
+            var member = repository.Get<Member>(m => m.UserName.Equals(loginViewModel.UserName.ToLower())).FirstOrDefault();
 
             if (member == null)
                 return false;
 
             if (!member.Password.Equals(Hashing.MultiEncrypt(loginViewModel.Password)))
                 return false;
+
+            var roles = repository.Get<RoleMember>(m => m.MemberId == member.Id).Include(m => m.Role);
 
             var user = new User()
             {
@@ -75,9 +76,13 @@ namespace Services.UserService
             var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, loginViewModel.UserName),
-                    new Claim(ClaimTypes.Role, "Admin"),
                     new Claim(ClaimTypes.NameIdentifier,member.Id.ToString())
                 };
+            Parallel.ForEach(roles, role =>
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role.Role.Title));
+            });
+
 
             //foreach (var permission in await GetUserPermission())
             //{
@@ -92,16 +97,16 @@ namespace Services.UserService
 
         public async Task<IEnumerable<Permission>> GetByMemberId()
         {
-            var all = uow.Get<RolePermission>()
-                     .Join(uow.Get<RoleMember>(), x => x.RoleId, y => y.RoleId, (x, y) => new { x.PermissionId, y.MemberId });
+            var all = repository.Get<RolePermission>()
+                     .Join(repository.Get<RoleMember>(), x => x.RoleId, y => y.RoleId, (x, y) => new { x.PermissionId, y.MemberId });
 
-            var denied = uow.Get<MemberPermission>(m => m.IsDenied ?? false).Select(m => new { m.PermissionId, m.MemberId });
+            var denied = repository.Get<MemberPermission>(m => m.IsDenied ?? false).Select(m => new { m.PermissionId, m.MemberId });
 
-            var access = uow.Get<MemberPermission>(m => !(m.IsDenied ?? false)).Select(m => new { m.PermissionId, m.MemberId });
+            var access = repository.Get<MemberPermission>(m => !(m.IsDenied ?? false)).Select(m => new { m.PermissionId, m.MemberId });
 
 
             var query = all.Union(access).Except(denied).Where(m => m.MemberId == MemberId)
-                     .Join(uow.Get<Permission>(), x => x.PermissionId, y => y.Id, (x, y) => new { y.Icon, y.Visible, y.Controller, y.Action, y.Id, y.Title, y.Order, y.ParentId, y.Active })
+                     .Join(repository.Get<Permission>(), x => x.PermissionId, y => y.Id, (x, y) => new { y.Icon, y.Visible, y.Controller, y.Action, y.Id, y.Title, y.Order, y.ParentId, y.Active })
                      .Where(m => m.Active.Value)
                      .OrderBy(m => m.Order);
 

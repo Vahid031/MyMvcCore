@@ -6,25 +6,22 @@ using ViewModels.General.MemberViewModel;
 using Infrastructure.Entities;
 using Infrastructure.Common;
 using Microsoft.EntityFrameworkCore;
-using Services.GenericService;
 using System.Threading.Tasks;
 using System;
-using Infrastructure.Enums;
-using Services.UserService;
 
 namespace Services.General.MemberService
 {
 
-    public class MemberService : GenericService<Member>, IMemberService
+    public class MemberService : Repository, IMemberService
     {
         public MemberService(IUnitOfWork uow)
-            : base(uow)
+        : base(uow)
         {
         }
 
         public IEnumerable<ListMemberViewModel> GetAll(ListMemberViewModel list, ref Paging pg)
         {
-            var query = uow.Get<Person>().Select(m => new { Person = m }).Paging(list, ref pg);
+            var query = Get<Person>().Select(m => new { Person = m }).Paging(list, ref pg);
 
             return query.AsEnumerable().Select(Result => new ListMemberViewModel()
             {
@@ -34,24 +31,25 @@ namespace Services.General.MemberService
 
         public CreateMemberViewModel Get(Guid Id)
         {
-            var query = Get(m => m.Id == Id);
+            var query = Get<Member>(m => m.PersonId == Id).Include(m => m.Person);
+
 
             return query.AsEnumerable().Select(Result => new CreateMemberViewModel()
-            { 
-                Member = Result, 
-                Person = Result.Person 
+            {
+                Member = Result,
+                Person = Result.Person
             }).FirstOrDefault();
         }
 
         public IEnumerable<Tree> Permission(Guid id, bool isDenied)
         {
-            var member = uow.Get<MemberPermission>()
+            var member = Get<MemberPermission>()
                             .AsQueryable()
                             .Where(m => id == m.MemberId)
                             .Where(m => m.IsDenied == isDenied)
                             .ToList();
 
-            return uow.Get<Permission>().AsEnumerable().Select(Result => new Tree()
+            return Get<Permission>().AsEnumerable().Select(Result => new Tree()
             {
                 id = Result.Id,
                 parentId = Result.ParentId,
@@ -81,9 +79,7 @@ namespace Services.General.MemberService
         {
             //uow.Entry<Permission>(Find(id)).Collection(m => m.RolePermissions).Load();
 
-            uow.Set<Person>().Remove(
-                uow.Get<Person>(m => m.Id.Equals(id)).First()
-                );
+            Delete<Person>(id);
 
             await uow.CommitAsync();
         }
