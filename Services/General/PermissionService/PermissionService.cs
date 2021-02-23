@@ -5,15 +5,13 @@ using DomainModels.General;
 using DatabaseContext;
 using ViewModels.General.PermissionViewModel;
 using Infrastructure.Entities;
-using Services.GenericService;
-using Services.UserService;
 using Infrastructure.Common;
 using System.Threading.Tasks;
 
 namespace Services.General.PermissionService
 {
 
-    public class PermissionService : GenericService<Permission>, IPermissionService
+    public class PermissionService : Repository, IPermissionService
     {
         public readonly IUserService userService;
 
@@ -52,7 +50,7 @@ namespace Services.General.PermissionService
 
         public IEnumerable<Tree> Tree()
         {
-            var query = uow.Get<Permission>().OrderBy(m => m.Order);
+            var query = Get<Permission>().OrderBy(m => m.Order);
 
             return query.AsEnumerable().Select(Result => new Tree()
             {
@@ -68,9 +66,9 @@ namespace Services.General.PermissionService
 
         public async Task ChangePeriority(Guid id, Guid parentId)
         {
-            var permission = Find(id);
+            var permission = Find<Permission>(id);
 
-            var siblings = uow.Get<Permission>(m => m.ParentId.Equals(parentId)).OrderBy(m => m.Order).ToList();
+            var siblings = Get<Permission>(m => m.ParentId.Equals(parentId)).OrderBy(m => m.Order).ToList();
 
             int i;
             for (i = 0; i < siblings.Count(); i++)
@@ -86,7 +84,7 @@ namespace Services.General.PermissionService
 
         public async Task SetRolePermission(Guid roleId, Guid[] permissionId)
         {
-            uow.Set<RolePermission>().RemoveRange(uow.Get<RolePermission>(m => m.RoleId == roleId));
+            uow.Set<RolePermission>().RemoveRange(Get<RolePermission>(m => m.RoleId == roleId));
 
             var list = new List<RolePermission>();
 
@@ -106,7 +104,7 @@ namespace Services.General.PermissionService
         public async Task SetMemberPermission(Guid _memberId, Guid[] permissionId, bool isDenied)
         {
             uow.Set<MemberPermission>().RemoveRange(
-                uow.Get<MemberPermission>(m => m.MemberId == _memberId && (m.IsDenied == isDenied || permissionId.Contains(m.PermissionId.Value)))
+                Get<MemberPermission>(m => m.MemberId == _memberId && (m.IsDenied == isDenied || permissionId.Contains(m.PermissionId.Value)))
                 );
 
             var list = new List<MemberPermission>();
@@ -136,7 +134,7 @@ namespace Services.General.PermissionService
 
         public async Task UpdateAsync(Guid id, CreatePermissionViewModel model)
         {
-            var permission = Find(id);
+            var permission = Find<Permission>(id);
 
             if (permission == null)
                 return;
@@ -155,7 +153,7 @@ namespace Services.General.PermissionService
         public async Task DeleteAsync(Guid id)
         {
             //uow.Entry<Permission>(Find(id)).Collection(m => m.RolePermissions).Load();
-            Delete(id);
+            Delete<Permission>(id);
 
             await uow.CommitAsync();
         }

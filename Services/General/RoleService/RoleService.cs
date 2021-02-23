@@ -6,15 +6,13 @@ using DatabaseContext;
 using ViewModels.General.RoleViewModel;
 using Infrastructure.Entities;
 using Microsoft.EntityFrameworkCore.Internal;
-using Services.GenericService;
-using Services.UserService;
 using Infrastructure.Common;
 using System.Threading.Tasks;
 
 namespace Services.General.RoleService
 {
 
-    public class RoleService : GenericService<Role>, IRoleService
+    public class RoleService : Repository, IRoleService
     {
         public RoleService(IUnitOfWork uow)
             : base(uow)
@@ -23,7 +21,7 @@ namespace Services.General.RoleService
 
         public IEnumerable<ListRoleViewModel> GetAll(ListRoleViewModel list, ref Paging pg)
         {
-            return uow.Get<Role>().Paging(list, ref pg).AsEnumerable().Select(Result => new ListRoleViewModel()
+            return Get<Role>().Paging(list, ref pg).AsEnumerable().Select(Result => new ListRoleViewModel()
             {
                 Role = Result
             });
@@ -31,7 +29,7 @@ namespace Services.General.RoleService
 
         public IEnumerable<Tree> Tree()
         {
-            return uow.Get<Role>().AsEnumerable().Select(Result => new Tree()
+            return Get<Role>().AsEnumerable().Select(Result => new Tree()
             {
                 id = Result.Id.Value,
                 parentId = Result.ParentId,
@@ -74,7 +72,7 @@ namespace Services.General.RoleService
         public async Task Remove(Guid id)
         {
             //uow.Entry<Permission>(Find(id)).Collection(m => m.RolePermissions).Load();
-            Delete(id);
+            Delete<Role>(id);
 
             await uow.CommitAsync();
         }

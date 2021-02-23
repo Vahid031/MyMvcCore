@@ -1,9 +1,7 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using ViewModels.General;
-using Services.UserService;
 
 namespace Web.Pages.General.Controllers
 {

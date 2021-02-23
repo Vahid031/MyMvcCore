@@ -9,7 +9,6 @@ using System.ComponentModel;
 using System.Reflection;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq.Expressions;
 using Infrastructure.Common;
 using DatabaseContext.Extentions;
 
@@ -36,6 +35,7 @@ namespace DatabaseContext.Context
 
             modelBuilder.Seed();
         }
+
         public new DbSet<T> Set<T>() where T : class
         {
             return base.Set<T>();
@@ -153,16 +153,6 @@ namespace DatabaseContext.Context
                         prop.SetValue(entry.Entity, defaultValue?.Value);
                 }
             }
-        }
-
-        public IQueryable<T> Get<T>(Expression<Func<T, bool>> filter = null) where T : class
-        {
-            IQueryable<T> query = base.Set<T>();
-
-            if (filter != null)
-                query = query.Where(filter);
-
-            return query;
         }
     }
 }

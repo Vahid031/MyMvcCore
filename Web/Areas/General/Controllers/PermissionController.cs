@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ViewModels.General.PermissionViewModel;
 using Microsoft.AspNetCore.Authorization;
-using Services.UserService;
+using Services;
 using Infrastructure.Entities;
 using Infrastructure.Enums;
 using Infrastructure.Common;
@@ -77,7 +77,7 @@ namespace Web.Pages.General.Controllers
         {
             var model = new CreatePermissionViewModel()
             {
-                Permission = permissionService.Get().Include(m => m.Parent).Where(m => m.Id == id).FirstOrDefault()
+                Permission = permissionService.GetAll().Include(m => m.Parent).Where(m => m.Id == id).FirstOrDefault()
             };
 
             return PartialView("_Create", model);

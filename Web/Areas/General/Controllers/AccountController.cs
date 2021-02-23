@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using ViewModels.General;
 using Microsoft.AspNetCore.Authorization;
-using Services.UserService;
+using Services;
 
 namespace Web.Pages.General.Controllers
 {

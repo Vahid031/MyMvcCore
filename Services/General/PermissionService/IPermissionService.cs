@@ -1,6 +1,4 @@
-using DomainModels.General;
 using Infrastructure.Entities;
-using Services.GenericService;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -8,7 +6,7 @@ using ViewModels.General.PermissionViewModel;
 
 namespace Services.General.PermissionService
 {
-    public interface IPermissionService : IGenericService<Permission>
+    public interface IPermissionService : IRepository
     {
         IEnumerable<ListPermissionViewModel> GetAll(ListPermissionViewModel list, ref Paging pg);
 

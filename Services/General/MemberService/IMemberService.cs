@@ -1,6 +1,5 @@
 using DomainModels.General;
 using Infrastructure.Entities;
-using Services.GenericService;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -8,7 +7,7 @@ using ViewModels.General.MemberViewModel;
 
 namespace Services.General.MemberService
 {
-    public interface IMemberService : IGenericService<Member>
+    public interface IMemberService: IRepository<Member>
     {
         IEnumerable<ListMemberViewModel> GetAll(ListMemberViewModel list, ref Paging pg);
 
