@@ -42,7 +42,7 @@ namespace Web
                 //options.JsonSerializerOptions.Converters.Add(new JsonConverter());
             }); ;
 
-            services.AddDbContext<UnitOfWork>(options =>
+            services.AddDbContext<AppDBContext>(options =>
        options.UseSqlServer(Configuration.GetConnectionString("myConnectionString")));
 
             services.AddAuthorization(options =>
@@ -73,7 +73,7 @@ namespace Web
 
             // Example of how to customize a particular instance of cookie options and
             // is able to also use other services.
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IUnitOfWork, AppDBContext>();
             services.AddFactory<IPermissionService, PermissionService>();
             services.AddScoped<IMemberService, MemberService>();
             services.AddScoped<IRoleService, RoleService>();
@@ -110,7 +110,7 @@ namespace Web
 
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
-                var context = serviceScope.ServiceProvider.GetRequiredService<UnitOfWork>();
+                var context = serviceScope.ServiceProvider.GetRequiredService<AppDBContext>();
                 //context.Database.EnsureDeleted();
                 //context.Database.EnsureCreated();
                 //context.Database.Migrate();

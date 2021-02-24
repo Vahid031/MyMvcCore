@@ -23,6 +23,7 @@ namespace Infrastructure.Common
             string sql = command.CommandText;
             return sql;
         }
+
         public static IQueryable<TResult> Paging<TEntity, TResult>(this IQueryable<TResult> query, TEntity entity, ref Paging pg)
         {
             entity.DynamicFiltering(ref pg);
@@ -164,6 +165,7 @@ namespace Infrastructure.Common
             };
 
         private static object Private(this object obj, string privateField) => obj?.GetType().GetField(privateField, BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(obj);
+
         private static T Private<T>(this object obj, string privateField) => (T)obj?.GetType().GetField(privateField, BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(obj);
     }
 }

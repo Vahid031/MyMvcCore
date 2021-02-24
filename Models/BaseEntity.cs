@@ -1,9 +1,9 @@
-﻿using Infrastructure.Attributes;
+﻿using DomainModels.Attributes;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Infrastructure.Entities
+namespace DomainModels
 {
     public abstract class BaseEntity
     {

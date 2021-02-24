@@ -98,8 +98,8 @@ namespace Infrastructure.Common
 
 
         #region public methods
-        
-        public static string Convert2SHA(string temp)
+
+        private static string Convert2SHA(string temp)
         {
             SHA512 mySHATemp = new SHA512Managed();
 
@@ -117,7 +117,7 @@ namespace Infrastructure.Common
             return TempData.ToString();
         }
 
-        public static string Convert2MD5(string InputString)
+        private static string Convert2MD5(string InputString)
         {
             string OutString = string.Empty;
 
@@ -143,7 +143,7 @@ namespace Infrastructure.Common
             return Convert2MD5(Convert2MD5(Convert2SHA(Convert2SHA(value))));
         }
 
-        public static string EncryptTPL(string value)
+        private static string EncryptTPL(string value)
         {
             byte[] EncryptArray = TreeData(ConvertObjectToByteArray(value));
 
@@ -159,7 +159,7 @@ namespace Infrastructure.Common
             return temp;
         }
 
-        public static string DecryptTPL(string value)
+        private static string DecryptTPL(string value)
         {
             byte[] array = Hashing.StringToByte(value);
 

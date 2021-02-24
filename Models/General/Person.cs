@@ -1,8 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using Infrastructure.Validation;
-using Infrastructure.Entities;
 
 namespace DomainModels.General
 {
@@ -22,7 +20,6 @@ namespace DomainModels.General
 
         [Display(Name = "کد ملی")]
         [StringLength(10)]
-        [IranianNationalCode(ErrorMessage = "کد ملی معتبر نیست")]
         public string NationalCode { get; set; }
 
         [Display(Name = "شماره موبایل")]

@@ -1,12 +1,12 @@
-﻿using System;
+﻿using DomainModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
 
-namespace Services
+namespace Repository
 {
-    public interface IRepository<T> where T : class
+    public interface IBaseRepository<T> where T : BaseEntity
     {
         IQueryable<T> Get(Expression<Func<T, bool>> filter = null);
 
@@ -25,9 +25,5 @@ namespace Services
         void Delete(T entity);
 
         void Delete(IEnumerable<T> entities);
-
-        protected void SaveChanges(Guid? memberId = null);
-
-        protected Task SaveChangesAsync(Guid? memberId = null);
     }
 }

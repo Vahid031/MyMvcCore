@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Infrastructure.Attributes
+namespace DomainModels.Attributes
 {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
     public class IndexAttribute : Attribute

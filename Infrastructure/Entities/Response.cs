@@ -11,12 +11,4 @@ namespace Infrastructure.Entities
         public T Data { get; set; }
         public Paging Paging { get; set; }
     }
-
-    public class Response
-    {
-        public bool Success { get; set; }
-        public string Message { get; set; }
-        public string Type { get; set; }
-        public List<string> Errors { get; set; }
-    }
 }
