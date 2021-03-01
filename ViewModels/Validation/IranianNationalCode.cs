@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
-namespace Infrastructure.Validation
+namespace ViewModels.Validation
 {
     public class IranianNationalCode : ValidationAttribute, IClientModelValidator
     {

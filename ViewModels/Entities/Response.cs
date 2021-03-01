@@ -1,7 +1,5 @@
-﻿using Infrastructure.Enums;
-using System.Collections.Generic;
-
-namespace Infrastructure.Entities
+﻿
+namespace ViewModels.Entities
 {
     public class Response<T>
     {

@@ -13,6 +13,7 @@ using System.IO;
 using Web.Middlewares;
 using IoC.DependencyInjection;
 using Web.Service;
+using Web.Permission;
 
 namespace Web
 {

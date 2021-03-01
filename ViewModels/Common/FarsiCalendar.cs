@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Infrastructure.Common
+namespace ViewModels.Common
 {
     /// <summary>
     /// Product Name:     AutumnalCalender

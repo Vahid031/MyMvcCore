@@ -11,8 +11,7 @@ namespace Web.Pages.General.Controllers
     {
         //private readonly IUserService userService;
 
-        public AccountController(//IUserService userService
-            )
+        public AccountController()//IUserService userService
         {
             //this.userService = userService;
         }

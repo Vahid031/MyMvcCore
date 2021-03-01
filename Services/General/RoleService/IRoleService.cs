@@ -1,4 +1,4 @@
-using Infrastructure.Entities;
+using ViewModels.Entities;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

@@ -5,13 +5,10 @@ using Microsoft.Extensions.Logging;
 using Services.General.PermissionService;
 using Services.General.MemberService;
 using System.Collections.Generic;
-using System.Linq;
 using ViewModels.General.PermissionViewModel;
 using Microsoft.AspNetCore.Authorization;
-using Services;
-using Infrastructure.Entities;
-using Infrastructure.Enums;
-using Infrastructure.Common;
+using ViewModels.Entities;
+using ViewModels.Enums;
 using System.Threading.Tasks;
 using System;
 

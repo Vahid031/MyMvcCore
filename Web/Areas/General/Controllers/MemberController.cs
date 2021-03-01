@@ -1,13 +1,10 @@
-﻿using Infrastructure.Entities;
-using Infrastructure.Enums;
+﻿using ViewModels.Entities;
+using ViewModels.Enums;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Services.General.MemberService;
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
 using ViewModels.General.MemberViewModel;
 

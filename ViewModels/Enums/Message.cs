@@ -1,5 +1,5 @@
 ﻿
-namespace Infrastructure.Enums
+namespace ViewModels.Enums
 {
     public enum Alert
     {

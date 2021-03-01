@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
 
-namespace Web
+namespace Web.Permission
 {
     public class AuthorizationPolicyProvider : DefaultAuthorizationPolicyProvider
     {

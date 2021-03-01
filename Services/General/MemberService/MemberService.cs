@@ -1,9 +1,8 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
-using DomainModels.General;
 using ViewModels.General.MemberViewModel;
-using Infrastructure.Entities;
-using Infrastructure.Common;
+using ViewModels.Entities;
+using ViewModels.Common;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using System;

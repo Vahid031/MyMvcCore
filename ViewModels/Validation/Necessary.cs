@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 
-namespace Infrastructure.Validation
+namespace ViewModels.Validation
 {
     public class Necessary : ValidationAttribute, IClientModelValidator
     {

@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using Infrastructure.Common;
+using ViewModels.Common;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;

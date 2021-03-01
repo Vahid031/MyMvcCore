@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Routing;
 using Services;
 using System.Threading.Tasks;
 
-namespace Web
+namespace Web.Permission
 {
     public class AuthorizationRequirement : IAuthorizationRequirement
     {

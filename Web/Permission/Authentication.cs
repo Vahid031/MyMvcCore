@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Options;
 
-namespace Web
+namespace Web.Permission
 {
     internal class Authentication : IConfigureNamedOptions<CookieAuthenticationOptions>
     {

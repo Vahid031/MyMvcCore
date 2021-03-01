@@ -4,7 +4,7 @@ using System.Security.Cryptography;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace Infrastructure.Common
+namespace ViewModels.Common
 {
     public static class Hashing
     {

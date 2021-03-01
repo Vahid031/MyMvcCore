@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace Infrastructure.Entities
+namespace ViewModels.Entities
 {
     public class Paging
     {

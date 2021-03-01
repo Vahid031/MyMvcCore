@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Services;
 using System.Reflection.Metadata;
 
-namespace Web
+namespace Web.Permission
 {
     //[AttributeUsage(AttributeTargets.Class)]
     //public class Authorization : Attribute, IAuthorizationFilter
