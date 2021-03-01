@@ -1,15 +1,15 @@
-﻿using DatabaseContext;
+﻿using DatabaseContext.Context;
 using DomainModels.General;
 
 namespace Repository.General
 {
-    public interface IPermissionRepository : IBaseRepository<Permission>
+    public interface IPermissionRepository : IGenericRepository<Permission>
     {
 
     }
 
-    public class PermissionRepository : BaseRepository<Permission>
+    public class PermissionRepository : GenericRepository<Permission>, IPermissionRepository
     {
-        public PermissionRepository(IUnitOfWork unitOfWork) : base(unitOfWork) { }
+        public PermissionRepository(IAppDbContext unitOfWork) : base(unitOfWork) { }
     }
 }

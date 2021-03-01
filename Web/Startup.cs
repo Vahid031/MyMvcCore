@@ -1,23 +1,18 @@
-﻿using DatabaseContext.Context;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Options;
-using Services.General.PermissionService;
-using Services.General.RoleService;
-using Services.General.MemberService;
-using System;
 using Microsoft.AspNetCore.Http;
-using Services;
-using DatabaseContext;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.FileProviders;
 using System.IO;
+using Web.Middlewares;
+using IoC.DependencyInjection;
+using Web.Service;
 
 namespace Web
 {
@@ -42,8 +37,7 @@ namespace Web
                 //options.JsonSerializerOptions.Converters.Add(new JsonConverter());
             }); ;
 
-            services.AddDbContext<AppDBContext>(options =>
-       options.UseSqlServer(Configuration.GetConnectionString("myConnectionString")));
+            services.AddPersistenceContexts(Configuration);
 
             services.AddAuthorization(options =>
             {
@@ -71,13 +65,9 @@ namespace Web
                         options.LogoutPath = "/account/Logout";
                     });
 
-            // Example of how to customize a particular instance of cookie options and
-            // is able to also use other services.
-            services.AddScoped<IUnitOfWork, AppDBContext>();
-            services.AddFactory<IPermissionService, PermissionService>();
-            services.AddScoped<IMemberService, MemberService>();
-            services.AddScoped<IRoleService, RoleService>();
 
+            services.AddRepositories();
+            services.AddServices();
 
             services.AddScoped<IUserService, UserService>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -108,13 +98,15 @@ namespace Web
                 app.UseHsts();
             }
 
-            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
-            {
-                var context = serviceScope.ServiceProvider.GetRequiredService<AppDBContext>();
-                //context.Database.EnsureDeleted();
-                //context.Database.EnsureCreated();
-                //context.Database.Migrate();
-            }
+            app.UseMiddleware<ErrorHandlerMiddleware>();
+
+            //using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            //{
+            //    var context = serviceScope.ServiceProvider.GetRequiredService<AppDBContext>();
+            //    //context.Database.EnsureDeleted();
+            //    //context.Database.EnsureCreated();
+            //    //context.Database.Migrate();
+            //}
 
             app.UseStaticFiles();
 
@@ -140,14 +132,5 @@ namespace Web
         }
     }
 
-    public static class ServiceCollectionExtensions
-    {
-        public static void AddFactory<TService, TImplementation>(this IServiceCollection services)
-            where TService : class
-            where TImplementation : class, TService
-        {
-            services.AddTransient<TService, TImplementation>();
-            services.AddSingleton<Func<TService>>(x => () => x.GetService<TService>());
-        }
-    }
+
 }

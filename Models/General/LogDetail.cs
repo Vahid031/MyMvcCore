@@ -1,22 +1,18 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using Infrastructure.Entities;
 
 namespace DomainModels.General
 {
     [Table("LogDetails", Schema = "General")]
     public class LogDetail : BaseEntity
     {
-        [Display(Name = "فیلد")]
-        [StringLength(40, ErrorMessage = "حداکثر 40 کاراکتر")]
-        public string PropertyName { get; set; }
-               
-        [Display(Name = "نام")]
-        [StringLength(50, ErrorMessage = "حداکثر 50 کاراکتر")]
-        public string PropertyValue { get; set; }
+        [MaxLength(50)]
+        public string Key { get; set; }
 
-        [Display(Name = "وقعه")]
+        [MaxLength(50)]
+        public string Value { get; set; }
+
         public Guid? LogId { get; set; }
 
         [ForeignKey(nameof(LogId))]

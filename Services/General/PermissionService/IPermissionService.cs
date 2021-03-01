@@ -6,7 +6,7 @@ using ViewModels.General.PermissionViewModel;
 
 namespace Services.General.PermissionService
 {
-    public interface IPermissionService : IRepository
+    public interface IPermissionService 
     {
         IEnumerable<ListPermissionViewModel> GetAll(ListPermissionViewModel list, ref Paging pg);
 

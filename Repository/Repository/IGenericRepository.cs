@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 
 namespace Repository
 {
-    public interface IBaseRepository<T> where T : BaseEntity
+    public interface IGenericRepository<T> where T : BaseEntity
     {
         IQueryable<T> Get(Expression<Func<T, bool>> filter = null);
 

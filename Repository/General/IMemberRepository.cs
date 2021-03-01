@@ -1,15 +1,15 @@
-﻿using DatabaseContext;
+﻿using DatabaseContext.Context;
 using DomainModels.General;
 
 namespace Repository.General
 {
-    public interface IMemberRepository : IBaseRepository<Member>
+    public interface IMemberRepository : IGenericRepository<Member>
     {
 
     }
 
-    public class MemberRepository : BaseRepository<Member>
+    public class MemberRepository : GenericRepository<Member>, IMemberRepository
     {
-        public MemberRepository(IUnitOfWork unitOfWork) : base(unitOfWork) { }
+        public MemberRepository(IAppDbContext unitOfWork) : base(unitOfWork) { }
     }
 }

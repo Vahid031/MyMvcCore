@@ -9,11 +9,12 @@ namespace Web.Pages.General.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly IUserService userService;
+        //private readonly IUserService userService;
 
-        public AccountController(IUserService userService)
+        public AccountController(//IUserService userService
+            )
         {
-            this.userService = userService;
+            //this.userService = userService;
         }
 
         [HttpGet]
@@ -21,8 +22,8 @@ namespace Web.Pages.General.Controllers
         {
             ViewBag.ReturnUrl = returnUrl;
 
-            if (userService.IsAuthenticated)
-                return Redirect("/");
+            //if (userService.IsAuthenticated)
+            //    return Redirect("/");
 
             return View();
         }
@@ -32,7 +33,7 @@ namespace Web.Pages.General.Controllers
         {
             string returnUrl = ViewBag.ReturnUrl;
 
-            if (await userService.LoginAsync(loginViewModel))
+            //if (await userService.LoginAsync(loginViewModel))
             {
                 if (Url.IsLocalUrl(returnUrl))
                     return Redirect(returnUrl);
@@ -52,14 +53,15 @@ namespace Web.Pages.General.Controllers
         [HttpGet]
         public IActionResult CheckAuthentication()
         {
-            return Json(userService.IsAuthenticated);
+            return Json(true);
+            //return Json(userService.IsAuthenticated);
         }
 
         [Authorize]
         [HttpGet]
         public async Task<IActionResult> Logout()
         {
-            await userService.LogoutAsync();
+            //await userService.LogoutAsync();
             return Redirect("/");
         }
 

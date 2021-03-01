@@ -23,17 +23,18 @@ namespace Web.Pages.General.Controllers
         private readonly ILogger<PermissionController> logger;
         private readonly IPermissionService permissionService;
         private readonly IMemberService memberService;
-        private readonly IUserService userService;
+        //private readonly IUserService userService;
 
         public PermissionController(ILogger<PermissionController> logger,
                                     IPermissionService permissionService,
-                                    IMemberService memberService,
-                                    IUserService userService)
+                                    IMemberService memberService
+                                    //IUserService userService
+            )
         {
             this.logger = logger;
             this.permissionService = permissionService;
             this.memberService = memberService;
-            this.userService = userService;
+            //this.userService = userService;
         }
 
         #region Views
@@ -62,10 +63,10 @@ namespace Web.Pages.General.Controllers
         {
             var list = new List<SelectListItem>();
 
-            foreach (var member in memberService.Get().Include(m => m.Person).AsEnumerable())
-            {
-                list.Add(new SelectListItem() { Text = member.Person.FirstName + " " + member.Person.LastName, Value = member.Id.ToString() });
-            }
+            //foreach (var member in memberService.Get().Include(m => m.Person).AsEnumerable())
+            //{
+            //    list.Add(new SelectListItem() { Text = member.Person.FirstName + " " + member.Person.LastName, Value = member.Id.ToString() });
+            //}
 
             ViewBag.Members = list;
 
@@ -75,12 +76,12 @@ namespace Web.Pages.General.Controllers
         [HttpPost]
         public IActionResult _Update(Guid id)
         {
-            var model = new CreatePermissionViewModel()
-            {
-                Permission = permissionService.GetAll().Include(m => m.Parent).Where(m => m.Id == id).FirstOrDefault()
-            };
+            //var model = new CreatePermissionViewModel()
+            //{
+            //    Permission = permissionService.GetAll().Where(m => m.Id == id).FirstOrDefault()
+            //};
 
-            return PartialView("_Create", model);
+            return PartialView("_Create");
         }
 
         #endregion
@@ -119,7 +120,8 @@ namespace Web.Pages.General.Controllers
 
         public async Task<IActionResult> _Menu()
         {
-            return Json(await userService.GetByMemberId());
+            return Json(true);
+            //return Json(await userService.GetByMemberId());
         }
 
         [HttpPost]

@@ -14,13 +14,5 @@ namespace DomainModels
         [Index(IsUnique = true, IsClustered = true)]
         [Display(Name = "تاریخ ایجاد")]
         public DateTime? CreateDate { get; set; }
-
-
-        //public static bool operator ==(Guid a, Guid b) => a.ToString().Equals(b.ToString());
-        //public BaseEntity()
-        //{
-        //    Id = Guid.NewGuid();
-        //    CreateDate = DateTime.Now;
-        //}
     }
 }

@@ -32,13 +32,13 @@ namespace Web.Pages.General.Controllers
         [HttpPost]
         public IActionResult _Update(Guid id)
         {
-            var model = new CreateRoleViewModel()
-            {
-                Role = roleService.Find(id),
-                Parents = roleService.Get(m => m.Id != id).AsEnumerable().Select(m => new SelectListItem() { Value = m.Id.ToString(), Text = m.Title })
-            };
+            //var model = new CreateRoleViewModel()
+            //{
+            //    Role = roleService.GetAll().FirstOrDefault(m => m.Role.Id == id).Role,
+            //    Parents = roleService.Get(m => m.Id != id).AsEnumerable().Select(m => new SelectListItem() { Value = m.Id.ToString(), Text = m.Title })
+            //};
 
-            return PartialView("_Create", model);
+            return PartialView("_Create");
         }
 
         //[HttpPost]

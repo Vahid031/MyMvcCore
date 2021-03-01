@@ -1,15 +1,15 @@
-﻿using DatabaseContext;
+﻿using DatabaseContext.Context;
 using DomainModels.General;
 
 namespace Repository.General
 {
-    public interface IRoleRepository : IBaseRepository<Role>
+    public interface IRoleRepository : IGenericRepository<Role>
     {
 
     }
 
-    public class RoleRepository : BaseRepository<Role>
+    public class RoleRepository : GenericRepository<Role>, IRoleRepository
     {
-        public RoleRepository(IUnitOfWork unitOfWork) : base(unitOfWork) { }
+        public RoleRepository(IAppDbContext unitOfWork) : base(unitOfWork) { }
     }
 }

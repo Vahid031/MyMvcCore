@@ -2,33 +2,26 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
-using Infrastructure.Entities;
 
 namespace DomainModels.General
 {
     [Table("Logs", Schema = "General")]
     public class Log : BaseEntity
     {
-        [Display(Name = "نام جدول")]
-        [StringLength(40, ErrorMessage = "حداکثر 40 کاراکتر")]
+        [MaxLength(50)]
         public string TableName { get; set; }
 
-        [Display(Name = "شناسه سطر")]
         public Guid? RowId { get; set; }
 
-        [Display(Name = "نوع عملیات")]
-        [StringLength(10, ErrorMessage = "حداکثر 10 کاراکتر")]
+        [MaxLength(10)]
         public byte? State { get; set; }
 
-        [Display(Name = "تاریخ ثبت")]
-        [DisplayFormat(DataFormatString = "{yyyy-MM-dd HH:mm}")]
         public DateTime? Date { get; set; }
 
-        [Display(Name = "کاربر ثبت کننده")]
         public Guid? MemberId { get; set; }
 
         [ForeignKey(nameof(MemberId))]
-        public virtual Member Member { get; set; }
+        public  Member Member { get; set; }
 
         public ICollection<LogDetail> LogDetails { get; set; }
     }

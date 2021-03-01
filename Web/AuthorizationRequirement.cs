@@ -21,12 +21,12 @@ namespace Web
 
     public class PermissionHandler : AuthorizationHandler<AuthorizationRequirement>
     {
-        private readonly IUserService userService;
+        //private readonly IUserService userService;
 
-        public PermissionHandler(IUserService userService)
-        {
-            this.userService = userService;
-        }
+        //public PermissionHandler(IUserService userService)
+        //{
+        //    this.userService = userService;
+        //}
 
         protected async override Task HandleRequirementAsync(AuthorizationHandlerContext context, AuthorizationRequirement requirement)
         {
@@ -39,7 +39,8 @@ namespace Web
                 endpoint.RoutePattern.RequiredValues.TryGetValue("area", out var _area);
 
                 if (context.User.Identity.IsAuthenticated && _controller != null && _action != null &&
-                       await userService.HasPermission(_controller.ToString(), _action.ToString()))
+                       //await userService.HasPermission(_controller.ToString(), _action.ToString())
+                       true)
                 {
                     context.Succeed(requirement);
                 }

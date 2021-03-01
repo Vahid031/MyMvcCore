@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Reflection;
+using DomainModels.Attributes;
 using Microsoft.EntityFrameworkCore;
-using Infrastructure.Attributes;
 
 namespace DatabaseContext.Extentions
 {

@@ -6,10 +6,12 @@ using System.ComponentModel;
 using System.Reflection;
 using System.ComponentModel.DataAnnotations;
 using DatabaseContext.Extentions;
+using System.Threading;
+using System.Collections.Generic;
 
 namespace DatabaseContext.Context
 {
-    public class AppDBContext : DbContext, IUnitOfWork
+    public class AppDBContext : DbContext, IAppDbContext
     {
         public DbSet<Log> Logs { get; set; }
         public DbSet<LogDetail> LogDetails { get; set; }
@@ -17,8 +19,6 @@ namespace DatabaseContext.Context
         public DbSet<Member> Members { get; set; }
         public DbSet<Permission> Permissions { get; set; }
         public DbSet<Role> Roles { get; set; }
-        public DbSet<RolePermission> RolePermissions { get; set; }
-        public DbSet<RoleMember> RoleMembers { get; set; }
         public DbSet<MemberPermission> MemberPermissions { get; set; }
 
         public AppDBContext(DbContextOptions<AppDBContext> options) : base(options)
@@ -29,80 +29,14 @@ namespace DatabaseContext.Context
             modelBuilder.AddIndexes();
 
             modelBuilder.Seed();
+
+            base.OnModelCreating(modelBuilder);
         }
 
-        public void Commit()
-        {
-            ApplyDefaultValues();
+        IEnumerable<EntityEntry> IAppDbContext.ChangeTrackerEntries => ChangeTracker.Entries();
 
-            base.SaveChanges();
-            //using (var scope = Database.BeginTransaction())
-            //{
-            //    try
-            //    {
-            //        base.SaveChanges();
+        public override int SaveChanges() => base.SaveChanges(true);
 
-            //        if (memberId != null)
-            //        {
-            //            foreach (EntityEntry entry in ChangeTracker.Entries())
-            //                ApplyAuditLog(entry, memberId.Value);
-
-            //            base.SaveChanges();
-            //        }
-
-            //        scope.Commit();
-            //    }
-            //    catch (Exception)
-            //    {
-            //        scope.Rollback();
-            //    }
-            //}
-        }
-
-        public async Task CommitAsync()
-        {
-            ApplyDefaultValues();
-
-            await base.SaveChangesAsync();
-            //using (var scope = Database.BeginTransaction())
-            //{
-            //    try
-            //    {
-            //        base.SaveChanges();
-
-            //        if (memberId != null)
-            //        {
-            //            foreach (EntityEntry entry in ChangeTracker.Entries())
-            //                ApplyAuditLog(entry, memberId.Value);
-
-            //            base.SaveChanges();
-            //        }
-
-            //        await scope.CommitAsync();
-            //    }
-            //    catch (Exception)
-            //    {
-            //        await scope.RollbackAsync();
-            //    }
-            //}
-        }
-
-        private void ApplyDefaultValues()
-        {
-            DefaultValueAttribute defaultValue;
-
-            foreach (EntityEntry entry in ChangeTracker.Entries())
-            {
-                foreach (var prop in entry.Entity.GetType().GetProperties())
-                {
-                    defaultValue = (DefaultValueAttribute)prop.GetCustomAttribute(typeof(DefaultValueAttribute), false);
-
-                    var key = (KeyAttribute)prop.GetCustomAttribute(typeof(KeyAttribute), false);
-
-                    if (prop.GetValue(entry.Entity) == null)
-                        prop.SetValue(entry.Entity, defaultValue?.Value);
-                }
-            }
-        }
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default) => base.SaveChangesAsync(true, cancellationToken);
     }
 }

@@ -2,46 +2,50 @@
 using System.Linq;
 using System.Collections.Generic;
 using DomainModels.General;
-using DatabaseContext;
 using ViewModels.General.PermissionViewModel;
 using Infrastructure.Entities;
 using Infrastructure.Common;
 using System.Threading.Tasks;
+using Repository;
+using Repository.General;
+using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.EntityFrameworkCore;
 
 namespace Services.General.PermissionService
 {
 
-    public class PermissionService : Repository, IPermissionService
+    public class PermissionService : IPermissionService
     {
-        public readonly IUserService userService;
+        private readonly IUnitOfWork unitOfWork;
+        private readonly IMemberRepository memberRepository;
+        private readonly IPermissionRepository permissionRepository;
 
-        public PermissionService(IUnitOfWork uow, IUserService userService)
-            : base(uow)
+        public PermissionService(IUnitOfWork unitOfWork,
+                                 IMemberRepository memberRepository,
+                                 IPermissionRepository permissionRepository)
         {
-            this.userService = userService;
+            this.unitOfWork = unitOfWork;
+            this.memberRepository = memberRepository;
+            this.permissionRepository = permissionRepository;
         }
 
         public IEnumerable<ListPermissionViewModel> GetAll(ListPermissionViewModel list, ref Paging pg)
         {
-            var query = uow.Set<Permission>()
-                           .GroupJoin(uow.Set<Permission>(), x => x.ParentId, y => y.Id, (x, y) => new { Permission = x, Parent = y })
-                           .SelectMany(x => x.Parent.DefaultIfEmpty(), (x, y) => new { x.Permission, Parent = y })
-                           .Paging(list, ref pg);
-
+            var query = permissionRepository.Get().Include(m => m.Parent).Paging(list, ref pg);
 
             return query.AsEnumerable().Select(Result => new ListPermissionViewModel()
             {
                 Permission = new Permission()
                 {
-                    Id = Result.Permission.Id,
-                    Action = Result.Permission.Action,
-                    Controller = Result.Permission.Controller,
-                    Active = Result.Permission.Active,
-                    Order = Result.Permission.Order,
-                    ParentId = Result.Permission.ParentId,
-                    Title = Result.Permission.Title,
-                    Url = (string.IsNullOrEmpty(Result.Permission.Controller) ? "" : "../" + Result.Permission.Controller) + (string.IsNullOrEmpty(Result.Permission.Action) ? "" : "/" + Result.Permission.Action),
-                    Parent = Result.Permission.Parent
+                    Id = Result.Id,
+                    Action = Result.Action,
+                    Controller = Result.Controller,
+                    Active = Result.Active,
+                    Order = Result.Order,
+                    ParentId = Result.ParentId,
+                    Title = Result.Title,
+                    //Url = (string.IsNullOrEmpty(Result.Controller) ? "" : "../" + Result.Controller) + (string.IsNullOrEmpty(Result.Action) ? "" : "/" + Result.Permission.Action),
+                    Parent = Result.Parent
                 },
                 Parent = Result.Parent
             });
@@ -50,7 +54,7 @@ namespace Services.General.PermissionService
 
         public IEnumerable<Tree> Tree()
         {
-            var query = Get<Permission>().OrderBy(m => m.Order);
+            var query = permissionRepository.Get().OrderBy(m => m.Order);
 
             return query.AsEnumerable().Select(Result => new Tree()
             {
@@ -66,9 +70,9 @@ namespace Services.General.PermissionService
 
         public async Task ChangePeriority(Guid id, Guid parentId)
         {
-            var permission = Find<Permission>(id);
+            var permission = permissionRepository.Find(id);
 
-            var siblings = Get<Permission>(m => m.ParentId.Equals(parentId)).OrderBy(m => m.Order).ToList();
+            var siblings = permissionRepository.Get(m => m.ParentId.Equals(parentId)).OrderBy(m => m.Order).ToList();
 
             int i;
             for (i = 0; i < siblings.Count(); i++)
@@ -79,33 +83,33 @@ namespace Services.General.PermissionService
             permission.ParentId = parentId;
             permission.Order = i + 1;
 
-            await uow.CommitAsync(userService.MemberId);
+            await unitOfWork.CommitAsync();
         }
 
         public async Task SetRolePermission(Guid roleId, Guid[] permissionId)
         {
-            uow.Set<RolePermission>().RemoveRange(Get<RolePermission>(m => m.RoleId == roleId));
+            //uow.Set<RolePermission>().RemoveRange(Get<RolePermission>(m => m.RoleId == roleId));
 
-            var list = new List<RolePermission>();
+            //var list = new List<RolePermission>();
 
-            foreach (var id in permissionId)
-            {
-                list.Add(new RolePermission()
-                {
-                    RoleId = roleId,
-                    PermissionId = id
-                });
-            }
-            uow.Set<RolePermission>().AddRange(list);
+            //foreach (var id in permissionId)
+            //{
+            //    list.Add(new RolePermission()
+            //    {
+            //        RoleId = roleId,
+            //        PermissionId = id
+            //    });
+            //}
+            //uow.Set<RolePermission>().AddRange(list);
 
-            await uow.CommitAsync(userService.MemberId);
+            await unitOfWork.CommitAsync();
         }
 
         public async Task SetMemberPermission(Guid _memberId, Guid[] permissionId, bool isDenied)
         {
-            uow.Set<MemberPermission>().RemoveRange(
-                Get<MemberPermission>(m => m.MemberId == _memberId && (m.IsDenied == isDenied || permissionId.Contains(m.PermissionId.Value)))
-                );
+            //uow.Set<MemberPermission>().RemoveRange(
+            //    Get<MemberPermission>(m => m.MemberId == _memberId && (m.IsDenied == isDenied || permissionId.Contains(m.PermissionId.Value)))
+            //);
 
             var list = new List<MemberPermission>();
 
@@ -118,9 +122,9 @@ namespace Services.General.PermissionService
                     IsDenied = isDenied
                 });
             }
-            uow.Set<MemberPermission>().AddRange(list);
+            //uow.Set<MemberPermission>().AddRange(list);
 
-            await uow.CommitAsync(userService.MemberId);
+            await unitOfWork.CommitAsync();
         }
 
         public async Task InsertAsync(CreatePermissionViewModel model)
@@ -128,13 +132,13 @@ namespace Services.General.PermissionService
             model.Permission.Id = Guid.NewGuid();
             model.Permission.CreateDate = new DateTime();
 
-            Insert(model.Permission);
-            await uow.CommitAsync();
+            permissionRepository.Insert(model.Permission);
+            await unitOfWork.CommitAsync();
         }
 
         public async Task UpdateAsync(Guid id, CreatePermissionViewModel model)
         {
-            var permission = Find<Permission>(id);
+            var permission = permissionRepository.Find(id);
 
             if (permission == null)
                 return;
@@ -146,16 +150,15 @@ namespace Services.General.PermissionService
             permission.Title = model.Permission.Title;
             permission.Icon = model.Permission.Icon;
 
-            Update(permission);
-            await uow.CommitAsync();
+            permissionRepository.Update(permission);
+            await unitOfWork.CommitAsync();
         }
 
         public async Task DeleteAsync(Guid id)
         {
             //uow.Entry<Permission>(Find(id)).Collection(m => m.RolePermissions).Load();
-            Delete<Permission>(id);
-
-            await uow.CommitAsync();
+            permissionRepository.Delete(id);
+            await unitOfWork.CommitAsync();
         }
     }
 }

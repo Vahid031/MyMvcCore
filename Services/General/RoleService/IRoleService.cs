@@ -6,7 +6,7 @@ using ViewModels.General.RoleViewModel;
 
 namespace Services.General.RoleService
 {
-    public interface IRoleService : IRepository
+    public interface IRoleService 
     {
         IEnumerable<ListRoleViewModel> GetAll(ListRoleViewModel list, ref Paging pg);
 
