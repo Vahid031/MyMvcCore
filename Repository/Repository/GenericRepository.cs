@@ -28,7 +28,7 @@ namespace Repository
             return query;
         }
 
-        public T Find(object Id)
+        public T Find(Guid Id)
         {
             return unitOfWork.Set<T>().Find(Id);
         }
@@ -49,7 +49,6 @@ namespace Repository
             {
                 unitOfWork.Set<T>().Attach(entity);
             }
-
             unitOfWork.Entry(entity).State = EntityState.Modified;
         }
 
@@ -61,12 +60,11 @@ namespace Repository
             });
         }
 
-        public void Delete(object id)
+        public void Delete(Guid id)
         {
-            T entity = unitOfWork.Set<T>().Find(id);
-
-            if (entity != null)
-                Delete(entity);
+            T entity = GetInstance();
+            entity.Id = id;
+            Delete(entity);
         }
 
         public void Delete(T entity)
@@ -75,7 +73,7 @@ namespace Repository
             {
                 unitOfWork.Set<T>().Attach(entity);
             }
-            unitOfWork.Set<T>().Remove(entity);
+            unitOfWork.Entry(entity).State = EntityState.Deleted;
         }
 
         public void Delete(IEnumerable<T> entities)
@@ -85,5 +83,7 @@ namespace Repository
                 Delete(entity);
             });
         }
+
+        public T GetInstance() => (T)Activator.CreateInstance(typeof(T));
     }
 }

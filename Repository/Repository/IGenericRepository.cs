@@ -10,7 +10,7 @@ namespace Repository
     {
         IQueryable<T> Get(Expression<Func<T, bool>> filter = null);
 
-        T Find(object Id);
+        T Find(Guid Id);
 
         void Insert(T entity);
 
@@ -20,10 +20,12 @@ namespace Repository
 
         void Update(IEnumerable<T> entities);
 
-        void Delete(object id);
+        void Delete(Guid id);
 
         void Delete(T entity);
 
         void Delete(IEnumerable<T> entities);
+
+        T GetInstance();
     }
 }

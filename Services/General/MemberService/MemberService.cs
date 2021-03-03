@@ -73,7 +73,9 @@ namespace Services.General.MemberService
 
         public async Task InsertAsync(CreateMemberViewModel model)
         {
-            memberRepository.Insert(model.Member);
+            var member = memberRepository.GetInstance();
+            member = model.Member;
+            memberRepository.Insert(member);
             await unitOfWork.CommitAsync();
         }
 
@@ -86,7 +88,7 @@ namespace Services.General.MemberService
 
         public async Task DeleteAsync(Guid id)
         {
-            //uow.Entry<Permission>(Find(id)).Collection(m => m.RolePermissions).Load();
+            //unitOfWork.Entry<Permission>(Find(id)).Collection(m => m.RolePermissions).Load();
 
             memberRepository.Delete(id);
             await unitOfWork.CommitAsync();
