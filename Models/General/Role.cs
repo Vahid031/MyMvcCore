@@ -18,6 +18,6 @@ namespace DomainModels.General
         [ForeignKey(nameof(ParentId))]
         public Role Parent { get; set; }
 
-        public virtual ICollection<RolePermission> RolePermissions { get; set; }
+        public ICollection<RolePermission> RolePermissions { get; set; }
     }
 }

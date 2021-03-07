@@ -16,6 +16,6 @@ namespace DomainModels.General
         public Guid? LogId { get; set; }
 
         [ForeignKey(nameof(LogId))]
-        public virtual Log Log { get; set; }
+        public Log Log { get; set; }
     }
 }
