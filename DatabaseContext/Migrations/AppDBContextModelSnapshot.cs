@@ -4,22 +4,106 @@ using DatabaseContext.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DatabaseContext.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20210129172326_MigrationModel_001")]
-    partial class MigrationModel_001
+    partial class AppDBContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("DomainModels.General.Branch", b =>
+                {
+                    b.Property<Guid?>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<int?>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id")
+                        .HasAnnotation("SqlServer:Clustered", false);
+
+                    b.HasIndex("CreateDate")
+                        .IsUnique()
+                        .HasAnnotation("SqlServer:Clustered", true);
+
+                    b.HasIndex("ParentId");
+
+                    b.ToTable("Branchs","General");
+                });
+
+            modelBuilder.Entity("DomainModels.General.BranchRole", b =>
+                {
+                    b.Property<Guid?>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("BranchId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("RoleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id")
+                        .HasAnnotation("SqlServer:Clustered", false);
+
+                    b.HasIndex("BranchId");
+
+                    b.HasIndex("CreateDate")
+                        .IsUnique()
+                        .HasAnnotation("SqlServer:Clustered", true);
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("BranchRoles","General");
+                });
+
+            modelBuilder.Entity("DomainModels.General.BranchRoleMember", b =>
+                {
+                    b.Property<Guid?>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("BranchRoleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("MemberId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id")
+                        .HasAnnotation("SqlServer:Clustered", false);
+
+                    b.HasIndex("BranchRoleId");
+
+                    b.HasIndex("CreateDate")
+                        .IsUnique()
+                        .HasAnnotation("SqlServer:Clustered", true);
+
+                    b.HasIndex("MemberId");
+
+                    b.ToTable("BranchRoleMembers","General");
+                });
 
             modelBuilder.Entity("DomainModels.General.Log", b =>
                 {
@@ -43,8 +127,8 @@ namespace DatabaseContext.Migrations
                         .HasMaxLength(10);
 
                     b.Property<string>("TableName")
-                        .HasColumnType("nvarchar(40)")
-                        .HasMaxLength(40);
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
                     b.HasKey("Id")
                         .HasAnnotation("SqlServer:Clustered", false);
@@ -66,14 +150,14 @@ namespace DatabaseContext.Migrations
                     b.Property<DateTime?>("CreateDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Key")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
                     b.Property<Guid?>("LogId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("PropertyName")
-                        .HasColumnType("nvarchar(40)")
-                        .HasMaxLength(40);
-
-                    b.Property<string>("PropertyValue")
+                    b.Property<string>("Value")
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
@@ -123,37 +207,6 @@ namespace DatabaseContext.Migrations
                     b.ToTable("Members","General");
                 });
 
-            modelBuilder.Entity("DomainModels.General.MemberPermission", b =>
-                {
-                    b.Property<Guid?>("Id")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("CreateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool?>("IsDenied")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid?>("MemberId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("PermissionId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id")
-                        .HasAnnotation("SqlServer:Clustered", false);
-
-                    b.HasIndex("CreateDate")
-                        .IsUnique()
-                        .HasAnnotation("SqlServer:Clustered", true);
-
-                    b.HasIndex("MemberId");
-
-                    b.HasIndex("PermissionId");
-
-                    b.ToTable("MemberPermissions","General");
-                });
-
             modelBuilder.Entity("DomainModels.General.Permission", b =>
                 {
                     b.Property<Guid?>("Id")
@@ -184,8 +237,8 @@ namespace DatabaseContext.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Title")
-                        .HasColumnType("nvarchar(25)")
-                        .HasMaxLength(25);
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
                     b.Property<bool?>("Visible")
                         .HasColumnType("bit");
@@ -217,15 +270,15 @@ namespace DatabaseContext.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(25)")
-                        .HasMaxLength(25);
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
                     b.Property<bool?>("Gender")
                         .HasColumnType("bit");
 
                     b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(25)")
-                        .HasMaxLength(25);
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
                     b.Property<string>("MobileNumber")
                         .HasColumnType("nvarchar(11)")
@@ -276,34 +329,6 @@ namespace DatabaseContext.Migrations
                     b.ToTable("Roles","General");
                 });
 
-            modelBuilder.Entity("DomainModels.General.RoleMember", b =>
-                {
-                    b.Property<Guid?>("Id")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("CreateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("MemberId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("RoleId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id")
-                        .HasAnnotation("SqlServer:Clustered", false);
-
-                    b.HasIndex("CreateDate")
-                        .IsUnique()
-                        .HasAnnotation("SqlServer:Clustered", true);
-
-                    b.HasIndex("MemberId");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("RoleMembers","General");
-                });
-
             modelBuilder.Entity("DomainModels.General.RolePermission", b =>
                 {
                     b.Property<Guid?>("Id")
@@ -332,6 +357,35 @@ namespace DatabaseContext.Migrations
                     b.ToTable("RolePermissions","General");
                 });
 
+            modelBuilder.Entity("DomainModels.General.Branch", b =>
+                {
+                    b.HasOne("DomainModels.General.Branch", "Parent")
+                        .WithMany()
+                        .HasForeignKey("ParentId");
+                });
+
+            modelBuilder.Entity("DomainModels.General.BranchRole", b =>
+                {
+                    b.HasOne("DomainModels.General.Branch", "Branch")
+                        .WithMany("BranchRoles")
+                        .HasForeignKey("BranchId");
+
+                    b.HasOne("DomainModels.General.Role", "Role")
+                        .WithMany("BranchRoles")
+                        .HasForeignKey("RoleId");
+                });
+
+            modelBuilder.Entity("DomainModels.General.BranchRoleMember", b =>
+                {
+                    b.HasOne("DomainModels.General.BranchRole", "BranchRole")
+                        .WithMany()
+                        .HasForeignKey("BranchRoleId");
+
+                    b.HasOne("DomainModels.General.Member", "Member")
+                        .WithMany("BranchRoleMembers")
+                        .HasForeignKey("MemberId");
+                });
+
             modelBuilder.Entity("DomainModels.General.Log", b =>
                 {
                     b.HasOne("DomainModels.General.Member", "Member")
@@ -353,17 +407,6 @@ namespace DatabaseContext.Migrations
                         .HasForeignKey("PersonId");
                 });
 
-            modelBuilder.Entity("DomainModels.General.MemberPermission", b =>
-                {
-                    b.HasOne("DomainModels.General.Member", "Member")
-                        .WithMany()
-                        .HasForeignKey("MemberId");
-
-                    b.HasOne("DomainModels.General.Permission", "Permission")
-                        .WithMany()
-                        .HasForeignKey("PermissionId");
-                });
-
             modelBuilder.Entity("DomainModels.General.Permission", b =>
                 {
                     b.HasOne("DomainModels.General.Permission", "Parent")
@@ -373,20 +416,9 @@ namespace DatabaseContext.Migrations
 
             modelBuilder.Entity("DomainModels.General.Role", b =>
                 {
-                    b.HasOne("DomainModels.General.Role", "RoleParent")
+                    b.HasOne("DomainModels.General.Role", "Parent")
                         .WithMany()
                         .HasForeignKey("ParentId");
-                });
-
-            modelBuilder.Entity("DomainModels.General.RoleMember", b =>
-                {
-                    b.HasOne("DomainModels.General.Member", "Member")
-                        .WithMany()
-                        .HasForeignKey("MemberId");
-
-                    b.HasOne("DomainModels.General.Role", "Role")
-                        .WithMany("RoleMembers")
-                        .HasForeignKey("RoleId");
                 });
 
             modelBuilder.Entity("DomainModels.General.RolePermission", b =>

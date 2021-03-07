@@ -17,9 +17,10 @@ namespace DatabaseContext.Context
         public DbSet<LogDetail> LogDetails { get; set; }
         public DbSet<Person> Persons { get; set; }
         public DbSet<Member> Members { get; set; }
-        public DbSet<Permission> Permissions { get; set; }
         public DbSet<Role> Roles { get; set; }
-        public DbSet<MemberPermission> MemberPermissions { get; set; }
+        public DbSet<Permission> Permissions { get; set; }
+        public DbSet<Branch> Branchs { get; set; }
+        public DbSet<BranchRole> BranchRoles { get; set; }
 
         public AppDBContext(DbContextOptions<AppDBContext> options) : base(options)
         { }

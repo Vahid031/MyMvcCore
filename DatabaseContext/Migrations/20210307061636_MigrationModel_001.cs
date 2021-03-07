@@ -11,13 +11,37 @@ namespace DatabaseContext.Migrations
                 name: "General");
 
             migrationBuilder.CreateTable(
+                name: "Branchs",
+                schema: "General",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    CreateDate = table.Column<DateTime>(nullable: true),
+                    Title = table.Column<string>(maxLength: 50, nullable: true),
+                    Type = table.Column<int>(nullable: true),
+                    ParentId = table.Column<Guid>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Branchs", x => x.Id)
+                        .Annotation("SqlServer:Clustered", false);
+                    table.ForeignKey(
+                        name: "FK_Branchs_Branchs_ParentId",
+                        column: x => x.ParentId,
+                        principalSchema: "General",
+                        principalTable: "Branchs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Permissions",
                 schema: "General",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
                     CreateDate = table.Column<DateTime>(nullable: true),
-                    Title = table.Column<string>(maxLength: 25, nullable: true),
+                    Title = table.Column<string>(maxLength: 50, nullable: true),
                     Controller = table.Column<string>(maxLength: 25, nullable: true),
                     Action = table.Column<string>(maxLength: 25, nullable: true),
                     Order = table.Column<int>(nullable: true),
@@ -46,8 +70,8 @@ namespace DatabaseContext.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     CreateDate = table.Column<DateTime>(nullable: true),
-                    FirstName = table.Column<string>(maxLength: 25, nullable: true),
-                    LastName = table.Column<string>(maxLength: 25, nullable: true),
+                    FirstName = table.Column<string>(maxLength: 50, nullable: true),
+                    LastName = table.Column<string>(maxLength: 50, nullable: true),
                     Gender = table.Column<bool>(nullable: true),
                     NationalCode = table.Column<string>(maxLength: 10, nullable: true),
                     MobileNumber = table.Column<string>(maxLength: 11, nullable: true),
@@ -110,28 +134,28 @@ namespace DatabaseContext.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RolePermissions",
+                name: "BranchRoles",
                 schema: "General",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
                     CreateDate = table.Column<DateTime>(nullable: true),
-                    RoleId = table.Column<Guid>(nullable: true),
-                    PermissionId = table.Column<Guid>(nullable: true)
+                    BranchId = table.Column<Guid>(nullable: true),
+                    RoleId = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RolePermissions", x => x.Id)
+                    table.PrimaryKey("PK_BranchRoles", x => x.Id)
                         .Annotation("SqlServer:Clustered", false);
                     table.ForeignKey(
-                        name: "FK_RolePermissions_Permissions_PermissionId",
-                        column: x => x.PermissionId,
+                        name: "FK_BranchRoles_Branchs_BranchId",
+                        column: x => x.BranchId,
                         principalSchema: "General",
-                        principalTable: "Permissions",
+                        principalTable: "Branchs",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_RolePermissions_Roles_RoleId",
+                        name: "FK_BranchRoles_Roles_RoleId",
                         column: x => x.RoleId,
                         principalSchema: "General",
                         principalTable: "Roles",
@@ -146,7 +170,7 @@ namespace DatabaseContext.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     CreateDate = table.Column<DateTime>(nullable: true),
-                    TableName = table.Column<string>(maxLength: 40, nullable: true),
+                    TableName = table.Column<string>(maxLength: 50, nullable: true),
                     RowId = table.Column<Guid>(nullable: true),
                     State = table.Column<byte>(maxLength: 10, nullable: true),
                     Date = table.Column<DateTime>(nullable: true),
@@ -197,44 +221,14 @@ namespace DatabaseContext.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RoleMembers",
-                schema: "General",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    CreateDate = table.Column<DateTime>(nullable: true),
-                    MemberId = table.Column<Guid>(nullable: true),
-                    RoleId = table.Column<Guid>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RoleMembers", x => x.Id)
-                        .Annotation("SqlServer:Clustered", false);
-                    table.ForeignKey(
-                        name: "FK_RoleMembers_Members_MemberId",
-                        column: x => x.MemberId,
-                        principalSchema: "General",
-                        principalTable: "Members",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_RoleMembers_Roles_RoleId",
-                        column: x => x.RoleId,
-                        principalSchema: "General",
-                        principalTable: "Roles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "LogDetails",
                 schema: "General",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
                     CreateDate = table.Column<DateTime>(nullable: true),
-                    PropertyName = table.Column<string>(maxLength: 40, nullable: true),
-                    PropertyValue = table.Column<string>(maxLength: 50, nullable: true),
+                    Key = table.Column<string>(maxLength: 50, nullable: true),
+                    Value = table.Column<string>(maxLength: 50, nullable: true),
                     LogId = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
@@ -249,6 +243,40 @@ namespace DatabaseContext.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BranchRoles_BranchId",
+                schema: "General",
+                table: "BranchRoles",
+                column: "BranchId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BranchRoles_CreateDate",
+                schema: "General",
+                table: "BranchRoles",
+                column: "CreateDate",
+                unique: true)
+                .Annotation("SqlServer:Clustered", true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BranchRoles_RoleId",
+                schema: "General",
+                table: "BranchRoles",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Branchs_CreateDate",
+                schema: "General",
+                table: "Branchs",
+                column: "CreateDate",
+                unique: true)
+                .Annotation("SqlServer:Clustered", true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Branchs_ParentId",
+                schema: "General",
+                table: "Branchs",
+                column: "ParentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_LogDetails_CreateDate",
@@ -335,46 +363,6 @@ namespace DatabaseContext.Migrations
                 .Annotation("SqlServer:Clustered", true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_RoleMembers_CreateDate",
-                schema: "General",
-                table: "RoleMembers",
-                column: "CreateDate",
-                unique: true)
-                .Annotation("SqlServer:Clustered", true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RoleMembers_MemberId",
-                schema: "General",
-                table: "RoleMembers",
-                column: "MemberId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RoleMembers_RoleId",
-                schema: "General",
-                table: "RoleMembers",
-                column: "RoleId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RolePermissions_CreateDate",
-                schema: "General",
-                table: "RolePermissions",
-                column: "CreateDate",
-                unique: true)
-                .Annotation("SqlServer:Clustered", true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RolePermissions_PermissionId",
-                schema: "General",
-                table: "RolePermissions",
-                column: "PermissionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RolePermissions_RoleId",
-                schema: "General",
-                table: "RolePermissions",
-                column: "RoleId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Roles_CreateDate",
                 schema: "General",
                 table: "Roles",
@@ -392,6 +380,10 @@ namespace DatabaseContext.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "BranchRoles",
+                schema: "General");
+
+            migrationBuilder.DropTable(
                 name: "LogDetails",
                 schema: "General");
 
@@ -400,11 +392,11 @@ namespace DatabaseContext.Migrations
                 schema: "General");
 
             migrationBuilder.DropTable(
-                name: "RoleMembers",
+                name: "Branchs",
                 schema: "General");
 
             migrationBuilder.DropTable(
-                name: "RolePermissions",
+                name: "Roles",
                 schema: "General");
 
             migrationBuilder.DropTable(
@@ -413,10 +405,6 @@ namespace DatabaseContext.Migrations
 
             migrationBuilder.DropTable(
                 name: "Permissions",
-                schema: "General");
-
-            migrationBuilder.DropTable(
-                name: "Roles",
                 schema: "General");
 
             migrationBuilder.DropTable(

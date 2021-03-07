@@ -21,6 +21,6 @@ namespace DomainModels.General
         [ForeignKey(nameof(PersonId))]
         public Person Person { get; set; }
 
-        public ICollection<Role> Roles { get; set; }
+        public ICollection<BranchRoleMember> BranchRoleMembers { get; set; }
     }
 }
