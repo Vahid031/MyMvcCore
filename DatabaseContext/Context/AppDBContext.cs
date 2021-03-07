@@ -14,13 +14,11 @@ namespace DatabaseContext.Context
     public class AppDBContext : DbContext, IAppDbContext
     {
         public DbSet<Log> Logs { get; set; }
-        public DbSet<LogDetail> LogDetails { get; set; }
         public DbSet<Person> Persons { get; set; }
         public DbSet<Member> Members { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Permission> Permissions { get; set; }
         public DbSet<Branch> Branchs { get; set; }
-        public DbSet<BranchRole> BranchRoles { get; set; }
 
         public AppDBContext(DbContextOptions<AppDBContext> options) : base(options)
         { }
